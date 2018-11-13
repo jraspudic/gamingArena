@@ -1,0 +1,136 @@
+<%- include partials/header.ejs %>
+                
+                <div id="NASLOVNICA">
+                    <div class="header-overlay">
+                     <div class="container">
+                         <div class="row">
+                                <div class="col-md-12">
+                                    <!-- logo -->
+                                    <div class="logo text-center">
+                                        <img src="images/logo.png" alt="logo">
+                                    </div>
+                             </div>
+                         </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="header-text text-center">
+                                        <!-- Naslov i opis -->
+                                        <h1>Mjesto gdje zabava ne prestaje</h1>
+                                    </div>
+                                    <div class="header-btns text-center">
+                                        <!-- Buttons u naslavu -->
+                                        <a class="btn btn-registr" href="/register">REGISTRIRAJTE SE</a>
+                                        <a class="btn btn-sazn" href="/#O-NAMA">SAZNAJTE VIŠE 
+                                            <i class="fa fa-angle-down"></i>
+                                        </a>
+    
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+        
+        <!-- O nama -->
+        <section ID="O-NAMA">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <!-- O nama i opis-->
+                        <div class="o-nama">
+                            <h2 class="col-md-12">O nama</h2>
+                            <p>Omogućavamo Vam igranje trenutno najpopularnijih igrica svijeta! Dajemo Vam i mogućnost da zajedno sa svojim timom igrate na turnirima, te tako osvojite vrijedne nagrade. Kod nas je također moguće da kupite i sjajnu gaming opremu, za još bolji užitak igranja u svome domu!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="turniri col-md-6">
+                            <div>
+                                <div><i class="fa fa-calendar col-md-12"></i></div>
+                                <p>Na našoj stranici ćete moći sudjelovati u raznim turnirima na koje se možete prijaviti sa svojim timom, a i samostalno. Na našoj stranici ćete moći sudjelovati u raznim turnirima na koje se možete prijaviti sa svojim timom, a i samostalno.</p>
+                            </div>
+                        </div>
+                        <div class="shop col-md-6">
+                            <div>
+                                <div><i class="fa fa-shopping-cart col-md-12"></i></div>
+                                <p>Na našoj stranici ćete moći sudjelovati u raznim turnirima na koje se možete prijaviti sa svojim timom, a i samostalno. Na našoj stranici ćete moći sudjelovati u raznim turnirima na koje se možete prijaviti sa svojim timom, a i samostalno.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </section>
+    	<!-- Programi u kojima smo radili -->
+       <section class="programi" id="PROGRAMI">
+            <div class="programi-overlay">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 wow bounceInDown">
+                            <div id="carousel-testimonial" class="carousel slide" data-ride="carousel">
+                                <!-- indikatori -->
+                                <ol class="carousel-indicators">
+                                    <li data-target="#carousel-testimonial" data-slide-to="0" class="active"></li>
+                                    <li data-target="#carousel-testimonial" data-slide-to="1"></li>
+                                    <li data-target="#carousel-testimonial" data-slide-to="2"></li>
+                                </ol>
+
+                                <!-- wrapper ta slajdere -->
+                                <div class="carousel-inner">
+                                    
+                                    <!-- html -->
+                                    <div class="item active text-center">
+                                        <img src="images/client-01.png" alt="testimonial" class="center-block">
+                                        <div class="programi-caption">
+                                            <h2>HTML</h2>
+                                            <h4>Osnovna struktura stranice.</h4>
+                                            <p>“Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.”</p>       
+                                        </div>             
+                                    </div>
+                                    
+                                    <!-- item 02 -->
+                                    <div class="item text-center">
+                                        <img src="images/client-02.png" alt="testimonial" class="center-block">  
+                                        <div class="programi-caption">
+                                            <h2>CSS</h2>
+                                            <h4>Dizajn stranice</h4>
+                                            <p>“Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.”</p>
+                                        </div>
+                                    </div>
+                                    <!-- item 03 -->
+                                    <div class="item text-center">
+                                        <img src="images/client-03.png" alt="testimonial" class="center-block">
+                                        <div class="programi-caption">
+                                            <h2>Javascript</h2>
+                                            <h4>Ponašanje stranice</h4>
+                                            <p>“Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.”</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div id="copyright">
+                            <p>Copyright &copy; 2018 <a href="#"> - Gaming Arena</a></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="scroll-top">
+                            <a href="#NASLOVNICA" id="scroll-to-top"><i class="fa fa-angle-up"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+<%- include partials/footer.ejs %>
