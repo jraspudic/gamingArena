@@ -13,6 +13,14 @@ app.get("/", function(req,res){
    res.render("landing"); 
 });
 
+app.get("/shop", function(req,res){
+   res.render("shop"); 
+});
+
+app.get("/novosti", function(req,res){
+   res.render("novosti"); 
+});
+
 app.get("/vizija", function(req,res){
    res.render("vizija");
 });
