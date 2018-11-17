@@ -1,0 +1,41 @@
+.btn-kupi{
+    color: #129CF3;
+    background: transparent;
+    border-color: #129CF3;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+    font-size: 19px;
+    text-transform: uppercase;
+    border-radius: 3px;
+    transition: all 1s;
+          display:block;
+    margin:auto;
+    }
+            .slika{
+                width: 250px;
+                height: 380px;
+                 display:block;
+                margin:auto;
+                
+            }
+            .naslov-artikla{
+                font-size: 24px;
+                text-align: center;
+        
+                
+            }
+  .cijena{
+     text-align: center;
+            }
+            #O-NAMA{
+                margin-top: 80px;
+                padding-top: 50px;
+            }
+            .navbarr{
+                background-color:cornflowerblue;
+            }
+            .card{
+                padding-bottom: 80px;
+            }

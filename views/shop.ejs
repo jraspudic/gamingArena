@@ -1,34 +1,38 @@
-<% include partials/header.ejs %>
-    
-<div class="container">
-    <header class="jumbotron">
-        <div class="container">
-            <h1>Welcome to shop</h1>
-            <p>pogledaj sve artikle</p>
-            <p>
-                <a class="btn btn-primary btn-lg" href="/shop/new">add new campground</a>
-            </p>
-        </div>
-</header>
+<%- include partials/header1.ejs %>
+    <link rel="stylesheet" type="text/css" href="css/shop.css">
+<%- include partials/header2.ejs %>
 
-    <!--<div class="col-lg-12">-->
-    <!--    <h3>Our Most Popular Site</h3>-->
-    <!--</div>-->
-    
-    <div class="row text-center" style="display:flex; flex-wrap: wrap;">
-        <% for(var i=0; i<100; i++){ %>
-            <div class="col-md-3 col-sm-6">
-                <div class="thumbnail">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/%C5%BDeljko_Kom%C5%A1i%C4%87.jpg/220px-%C5%BDeljko_Kom%C5%A1i%C4%87.jpg">
-                    <div class="caption">
-                        <h4> Stipica </h4>
-                        <p>
-                            <a href="/shop/stipica" class="btn btn-primary">More info</a>
-                        </p>
+              <!-- O nama -->
+        <section ID="O-NAMA">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-5 col-md-offset-1">
+                        <!-- O nama i opis-->
+                       
                     </div>
                 </div>
             </div>
-        <% }; %>
-    </div>
-</div>
+                <div class="container">
+                    <div class="row">
+                        
+                     <%   artikli.forEach(function(artikl){%>
+                        <div class=" col-md-4">
+                            <img class="slika" src="<%- artikl.slika %>" alt="laptop"/>
+                            <div class="card">
+                                <h1 class="naslov-artikla"><%- artikl.naziv %></h1>
+                                <p class="cijena"><%- artikl.cijena %> €</p>
+                                <button class="btn btn-kupi">Dodaj u košaricu</button>
+                            
+                            </div>
+                    
+                        </div>
+                                    <% }) %>
+                       
+                         
+                    </div>
+                </div>
+        </section>
+        </header>
+        
+        <a href="/shop/new"> <button>Dodaj novi artikl</button></a>
 <%- include partials/footer.ejs %>
