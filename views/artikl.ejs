@@ -1,0 +1,60 @@
+<%- include partials/header1v2.ejs %>
+     <link rel="stylesheet" type="text/css" href="../css/artikl.css">
+<%- include partials/header2.ejs %>
+     
+
+<section id="onama">
+         
+                <div class="containerr">
+                    <div class="roww">
+                        
+                        <div class=" col-md-4">
+                            <img class="slika" src="<%=artikl.slika%>" alt="lila"/>
+                            <div class="card">
+                                <h1 class="naslov-artikla"> <%=artikl.naziv%></h1>
+                                <h2 class="cijena"> <%=artikl.cijena%> $ </h2>
+                                <button class="btn btn-kupi">Dodaj u košaricu</button>
+                          
+                            
+                            </div>
+                    
+                        </div>
+                         <div class=" col-md-8">
+                          <div class="card-opis-artikla">
+                                <h1 class="naslov-artikla-opem"><%=artikl.naziv%></h1>
+                               
+                              <p><%=artikl.opis%>
+                              Omogućavamo Vam igranje trenutno najpopularnijih igrica svijeta! Dajemo Vam i mogućnost da zajedno sa svojim timom igrate na turnirima, te tako osvojite vrijedne nagrade. Kod nas je također moguće da kupite i sjajnu gaming opremu, za još bolji užitak igranja u svome domu!
+                              Omogućavamo Vam igranje trenutno najpopularnijih igrica svijeta! Dajemo Vam i mogućnost da zajedno sa svojim timom igrate na turnirima, te tako osvojite vrijedne nagrade. Kod nas je također moguće da kupite i sjajnu gaming opremu, za još bolji užitak igranja u svome domu!</p>
+                                
+                            
+                            </div>
+                        </div>
+                      
+ 
+                         
+                    </div>
+                </div>
+               
+        </section>
+        
+        <a href="<%=artikl._id%>/edit"><button type="button" class="btn btn-warning">Edituj artikl</button></a>
+        
+         <form action="/shop/<%=artikl._id%>?_method=DELETE" method="post">
+             <button type="submit" class="btn btn-danger" >Pobriši artikl</button>
+        </form>
+
+
+
+
+<!--<h1><%=artikl.naziv%></h1>
+
+<img  class="slika" src="<%=artikl.slika%>" alt="slika" >
+
+<h2> <%=artikl.cijena%> $ </h2>
+
+<p> <%=artikl.opis%> </p>
+                     
+
+-->
+<%- include partials/footer %>

@@ -12,6 +12,12 @@ p {
     font-size: 14px;
 }
 /* Nav bar */
+
+.navbar-left{
+     float: left!important;
+    margin-right: -15px;
+}
+
 .navbar-default {
     background-color:transparent;
     border-color: #fff;

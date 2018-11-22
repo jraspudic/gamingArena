@@ -1,21 +1,4 @@
-.btn-admin {
-     color: #129CF3;
-    background: transparent;
-    border-color: #129CF3;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 30px;
-    padding-right: 30px;
-    font-size: 14px;
-    text-transform: uppercase;
-    border-radius: 3px;
-    transition: all 1s;
-      
-       margin-right:1050px;
-   
-}
-
-.btn-kupi{
+    .btn-kupi{
     color: #129CF3;
     background: transparent;
     border-color: #129CF3;
@@ -30,10 +13,19 @@
     display:block;
     margin:auto;
     }
+    .roww{
+        padding-top:100px;
+         
+         
+    }
+  
+    .navbar{
+                background-color:black;
+            }
             .slika{
                 width: 250px;
-                height: 300px;
-                display:block;
+                height: 380px;
+                 display:block;
                 margin:auto;
                 
             }
@@ -46,17 +38,10 @@
   .cijena{
      text-align: center;
             }
-            #O-NAMA{
-                margin-top: 50px;
-                padding-top: 50px;
-                
-            }
+          
             .navbarr{
                 background-color:cornflowerblue;
             }
             .card{
                 padding-bottom: 80px;
             }
-            
-            
-   

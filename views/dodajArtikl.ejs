@@ -1,0 +1,53 @@
+<%- include partials/header1v2.ejs %>
+     <link rel="stylesheet" type="text/css" href="/../css/style.css">
+<%- include partials/header2.ejs %>
+<style>
+  
+  .row{
+    padding-top:80px;
+    min-height: 100vh;
+  }
+  
+  h1,
+  h1 a:hover{
+    text-align:center;
+    text-decoration:none;
+  }
+  
+  
+  
+</style>
+<div ="container">
+  <div class="row">
+    
+    <h1><center>Dodaj novi artikl</center></h1>
+    <div style="width: 30%; margin: 20px auto">
+      <form action="/shop" method="post">
+        
+        <div class="form-group">
+          <input class="form-control" type="text" name="artikl[naziv]" placeholder="naziv artikla">
+        </div>
+        
+        <div class="form-group">
+          <input class="form-control" type="text" name="artikl[cijena]" placeholder="cijena artikla">
+        </div>
+        
+        <div class="form-group">
+          <input class="form-control" type="text" name="artikl[slika]" placeholder="url slike">
+        </div>
+        
+        <div class="form-group">
+          <textarea class="form control" name="artikl[opis]" rows="10" cols="30" placeholder="opis artikla"></textarea>
+        </div>
+        
+        <div class="form-group">
+                  <button class="btn btn-lg btn-primary btn-block"> Submit </button>
+        </div>
+      </form>
+    </div>
+        <h1 ><a href="/shop">Vrati se u shop</a></h1>
+    
+  </div>
+</div>
+
+<%- include partials/footer %>
