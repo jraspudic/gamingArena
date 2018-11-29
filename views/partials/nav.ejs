@@ -1,10 +1,9 @@
- <script src="js/custom.js"></script>
+
  </head>   
     <body>
         <!--Naslovna-->
         <header class="header">
-             <!-- Nav bar -->
-            <nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-default navbar-fixed-top">
                 <div class="container">
                     <!-- Prilagođeno mobitelima -->
                     <div class="navbar-header">
@@ -17,6 +16,14 @@
                     </div>
                 <div class="collapse navbar-collapse" id="gamingarena-navbar-collapse-1">
                    
+                   <% if(currentUser){ %>
+                   
+                      <ul class="nav navbar-nav navbar-left">
+                           
+                            <li><a href="#" class="nav-item">Ulogiran kao <%=currentUser.username%></a></li>
+                      </ul>
+                     <% } %>
+                   
                   <ul class="nav navbar-nav navbar-right">
                        
                         <li><a href="/#NASLOVNICA" class="nav-item">NASLOVNICA</a></li>
@@ -24,8 +31,12 @@
                         <li><a href="/#PROGRAMI" class="nav-item">TEHNOLOGIJE</a></li>
                         <li><a href="/../vizija.pdf" target="_blank" class="nav-item">VIZIJA</a></li>
                        <li><a href="/shop" class="nav-item">SHOP</a></li>
-                        <li><a href="/login" class="nav-item">LOGIN</a></li> 
-                      
+                       <% if(!currentUser){ %>
+                        <li><a href="/login" class="nav-item">LOGIN</a></li>
+                       <% }
+                        else{   %>
+                        <li><a href="/logout" class="nav-item">LOGOUT</a></li>
+                      <%    }   %>
                   </ul>
                 </div><!-- /.navbar-collapse -->
               </div><!-- /.container-fluid -->

@@ -1,9 +1,14 @@
-var bodyParser       = require("body-parser"),
-   mongoose         = require("mongoose"),
-   expressSanitizer = require("express-sanitizer"),
-   methodOverride   = require("method-override"),
-   express         = require("express"),
-   app              = express();
+var express          = require("express"),
+    app              = express(),
+    bodyParser       = require("body-parser"),
+    mongoose         = require("mongoose"),
+    passport         = require("passport"),
+    LocalStrategy    = require("passport-local"),
+    expressSanitizer = require("express-sanitizer"),
+    User             = require("./models/user"),
+    methodOverride   = require("method-override"),
+    Artikl           = require("./models/artikl");
+    
 
 mongoose.connect("mongodb://localhost:27017/gamingArena", { useNewUrlParser: true });
 
@@ -13,16 +18,26 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(expressSanitizer());
 app.use(methodOverride("_method"));
 
+//PASSPORT CONFIGURATION
+app.use(require("express-session")({
+    secret: "bilo sta mozes ovdje napisat nije bitno",
+    resave: false,
+    saveUninitialized: false
+}));
 
-var artiklSchema = new mongoose.Schema({
-    naziv: String,
-    slika: String,
-    cijena: Number,
-    opis: String
+app.use(passport.initialize());
+app.use(passport.session(User.authenticate()));
+
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use(function(req, res, next){
+   res.locals.currentUser = req.user;
+   next();
 });
-
-var Artikl = mongoose.model("Artikl", artiklSchema);
-
+/*****************************************************************/
     //pocetna stranica
 app.get("/", function(req,res){
    res.render("pocetna"); 
@@ -55,6 +70,9 @@ app.post("/shop",function(req,res){
 });
     //New route
 app.get("/shop/new", function(req,res){
+    if(!req.user){
+        res.redirect("/shop");
+    }
    res.render("dodajArtikl"); 
 });
 
@@ -113,21 +131,72 @@ app.delete("/shop/:id",function(req,res){
 
 /*************************************************************************/
 
+/**************************** Novosti ***********************************/
+     //Index route
 app.get("/novosti", function(req,res){
    res.render("novosti"); 
 });
 
-app.get("/vizija", function(req,res){
-   res.render("vizija");
+    //Create route
+app.post("/novosti",function(req,res){
+    req.body.artikl.opis = req.sanitize(req.body.artikl.opis); 
+    Artikl.create(
+    req.body.artikl,
+    function(err,noviArtikl){
+        if(err)
+            console.log("error");
+        else   
+            console.log("Dodan novi artikl: " + noviArtikl);
+    });
+    
+    res.redirect("/shop");
+});
+
+
+/*************************************************************************/
+
+
+
+//AUTENTIKACIJSKE RUTE
+
+app.get("/register", function(req,res){
+   res.render("registration"); 
+});
+
+app.post("/register", function(req, res) {
+    var newUser = new User({username: req.body.username, email: req.body.email});
+    User.register(newUser, req.body.password, function(err,user){
+        if(err){
+            console.log(err);
+            return res.render("registration");
+        }
+        else{
+            passport.authenticate("local")(req, res, function(){
+               res.redirect("/shop"); 
+            });
+        }
+    });
 });
 
 app.get("/login", function(req,res){
    res.render("login");
 });
 
-app.get("/register", function(req,res){
-   res.render("registration"); 
+app.post("/login", passport.authenticate("local",
+    {
+    successRedirect: "/shop",
+    failureRedirect: "/login"    
+    }),
+    
+    function(req,res){
+   
 });
+
+app.get("/logout", function(req, res){
+    req.logout();
+    res.redirect("/");
+});
+
 
 
 app.listen(8081, process.env.IP, function(){

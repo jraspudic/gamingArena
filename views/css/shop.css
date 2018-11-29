@@ -1,20 +1,3 @@
-.btn-admin {
-     color: #129CF3;
-    background: transparent;
-    border-color: #129CF3;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 30px;
-    padding-right: 30px;
-    font-size: 14px;
-    text-transform: uppercase;
-    border-radius: 3px;
-    transition: all 1s;
-      
-       margin-right:1050px;
-   
-}
-
 .btn-kupi{
     color: #129CF3;
     background: transparent;
@@ -30,33 +13,84 @@
     display:block;
     margin:auto;
     }
-            .slika{
-                width: 250px;
-                height: 300px;
-                display:block;
-                margin:auto;
+    
+    .slika{
+    width: 250px;
+    height: 300px;
+    display:block;
+    margin:auto;
                 
-            }
-            .naslov-artikla{
-                font-size: 24px;
-                text-align: center;
-        
+    }
                 
-            }
-  .cijena{
-     text-align: center;
-            }
-            #O-NAMA{
-                margin-top: 50px;
-                padding-top: 50px;
-                
-            }
-            .navbarr{
-                background-color:cornflowerblue;
-            }
-            .card{
-                padding-bottom: 80px;
-            }
+    .naslov-artikla{
+        font-size: 24px;
+        text-align: center;
             
+    }
+    
+    .cijena{
+         text-align: center;
+                }
+                
+     #shop{
+        margin-top: 50px;
+        padding-top: 50px;
+                    
+                }
+    #artikal{
+        margin-top: 50px;
+        padding-top: 50px;
+    }
+        
+    }
+                
+    .navbarr{
+        background-color:cornflowerblue;
+                }
+                
+                
+    .card{
+        padding-bottom: 80px;
+                }
+   /* Nav bar */
+
+
+.navbar-default {
+  background-color:rgba(93, 155, 217, 0.9);
+    border-color: #fff;
+    z-index: 110;
+    transition: all 1s;
+    -moz-transition: all 1s;
+    -o-transition: all 1s;
+    -webkit-transition: all 1s;
+}
+.navbar-default .navbar-nav > li > a {
+    color: white;
+    font-family: "Raleway", sans-serif;
+    transition: all 1s;
+    -moz-transition: all 1s;
+    -o-transition: all 1s;
+    -webkit-transition: all 1s;
+    
+}
+.navbar-default .navbar-nav > li > a:hover {
+    color: #black;
+}
+
+.navbar-brand {
+    padding: 9px 15px;
+}
+.navbar-brand img  {
+     transition: all 1s;
+    -moz-transition: all 1s;
+    -o-transition: all 1s;
+    -webkit-transition: all 1s;
+}
+.navbar-default .navbar-nav > .active>a, 
+.navbar-default .navbar-nav > .active>a:hover,
+.navbar-default .navbar-nav > .active>a:focus {
+    background-color: transparent;
+    color: #129CF3;
+}              
             
    

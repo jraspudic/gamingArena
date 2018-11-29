@@ -1,46 +1,23 @@
 <%- include partials/header1.ejs %>
+
     <link rel="stylesheet" type="text/css" href="css/shop.css">
-<%- include partials/header2.ejs %>
+<%- include partials/nav.ejs %>
 
-
- <nav class="navbar navbar-default navbar-fixed-top">
-                <div class="container">
-                    <!-- Prilagođeno mobitelima -->
-                    <div class="navbar-header">
-                      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#gamingarena-navbar-collapse-1" aria-expanded="false">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                      </button> 
-                    </div>
-                <div class="collapse navbar-collapse" id="gamingarena-navbar-collapse-1">
-                   <ul class="navbar-left nav navbar-nav"> 
-    <li><a href="/shop/new" class="nav-item-left">Dodaj novi artikl</a></li></ul>
-                  <ul class="nav navbar-nav navbar-right">
-                       
-                        <li><a href="/#NASLOVNICA" class="nav-item">NASLOVNICA</a></li>
-                        <li><a href="/#O-NAMA" class="nav-item">O NAMA</a></li>
-                        <li><a href="/#PROGRAMI" class="nav-item">TEHNOLOGIJE</a></li>
-                        <li><a href="/../vizija.pdf" target="_blank" class="nav-item">VIZIJA</a></li>
-                       <li><a href="/shop" class="nav-item">SHOP</a></li>
-                        <li><a href="/login" class="nav-item">LOGIN</a></li> 
-                      
-                  </ul>
-                </div><!-- /.navbar-collapse -->
-              </div><!-- /.container-fluid -->
-</nav>
-
-             
-        <section ID="O-NAMA">
+   
+        <section id="shop">
            
-              
-                <div class="container">
+            <div class="container">
                    
-                    <div class="row">
+                <div class="row">
                     
+                   <div class="col-md-12">
+                       
+                       <% if(currentUser){ %>
+                          <a href="shop/new"><button class="btn btn-warning">Dodaj artikl</button></a>
+                          <% } %>
                           
-                        
+                   </div>
+                   
                      <%   artikli.forEach(function(artikl){%>
                         <div class=" col-md-4">
                           <a href="/shop/<%=artikl._id%>"> <img class="slika" src="<%- artikl.slika %>" alt="laptop"/></a>
@@ -58,8 +35,4 @@
                     </div>
                 </div>
         </section>
-        
-        
-        
 
-<%- include partials/footer.ejs %>

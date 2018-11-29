@@ -1,7 +1,8 @@
 <%- include partials/header1.ejs %>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+     
     <link rel="stylesheet" type="text/css" href="css/login.css">
-<%- include partials/header2.ejs %>
+
+<%- include partials/nav.ejs %>
 
 <div class="header-overlay">
             
@@ -16,11 +17,11 @@
                                    <div class="logoo">
                                     <img src="images/logo.png" class="logoa">
                                 </div>
-                                          <form>
-                                            <input type="text" name="name" placeholder="Ime i prezime" >
+                                          <form action="/register" method="POST">
+                                            <input type="text" name="username" placeholder="Username" >
                                             <input type="text" name="email" placeholder="E-mail" >
-                                            <input type="password" name="pass" placeholder="Unesite lozinka" >
-                                            <input type="password" name="pass_confim" placeholder="Ponovo unesite lozinku" >
+                                            <input type="password" name="password" placeholder="Unesite lozinku" >
+                                            <input type="password" name="password_confirm" placeholder="Ponovo unesite lozinku" >
                                             <input type="submit" name="login" class="login loginmodal-submit" value="register">
                                           </form>
 					
