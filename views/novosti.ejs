@@ -16,21 +16,20 @@
     <!--<div class="col-lg-12">-->
     <!--    <h3>Our Most Popular Site</h3>-->
     <!--</div>-->
-    
     <div class="row text-center" style="display:flex; flex-wrap: wrap;">
-        <% for(var i=0; i<100; i++){ %>
+        <% novosti.forEach(function(novost){ %>
             <div class="col-md-3 col-sm-6">
                 <div class="thumbnail">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/%C5%BDeljko_Kom%C5%A1i%C4%87.jpg/220px-%C5%BDeljko_Kom%C5%A1i%C4%87.jpg">
+                    <img src="<%=novost.thumbnail%>">
                     <div class="caption">
-                        <h4> zelja </h4>
+                        <h4> <%=novost.naslov%> </h4>
                         <p>
-                            <a href="/novosti/stipica" class="btn btn-primary">More info</a>
+                            <a href="/novosti/<%=novost._id%>" class="btn btn-primary">Pročitaj više</a>
                         </p>
                     </div>
                 </div>
             </div>
-        <% }; %>
+        <% }); %>
     </div>
 </div>
 <%- include partials/footer.ejs %>

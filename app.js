@@ -7,7 +7,8 @@ var express          = require("express"),
     expressSanitizer = require("express-sanitizer"),
     User             = require("./models/user"),
     methodOverride   = require("method-override"),
-    Artikl           = require("./models/artikl");
+    Artikl           = require("./models/artikl"),
+    Novost           = require("./models/novost");
     
 
 mongoose.connect("mongodb://localhost:27017/gamingArena", { useNewUrlParser: true });
@@ -46,9 +47,8 @@ app.get("/", function(req,res){
 /***************************** SHOP *************************************/
     //Index route
 app.get("/shop", function(req,res){
-   
     Artikl.find({}, function(err, sviArtikli){
-            
+            console.log(sviArtikli[0]);
         if(err) console.log(err);
         
         else  res.render("shop",{artikli: sviArtikli});
@@ -56,7 +56,10 @@ app.get("/shop", function(req,res){
 });
     //Create route
 app.post("/shop",function(req,res){
-    req.body.artikl.opis = req.sanitize(req.body.artikl.opis); 
+    if(!req.user){
+     return res.redirect("/shop");
+    }
+    //req.body.artikl.opis = req.sanitize(req.body.artikl.opis); 
     Artikl.create(
     req.body.artikl,
     function(err,noviArtikl){
@@ -71,7 +74,7 @@ app.post("/shop",function(req,res){
     //New route
 app.get("/shop/new", function(req,res){
     if(!req.user){
-        res.redirect("/shop");
+        return res.redirect("/shop");
     }
    res.render("dodajArtikl"); 
 });
@@ -89,6 +92,9 @@ app.get("/shop/:id", function(req, res){
 });
     //edit route
 app.get("/shop/:id/edit", function(req, res) {
+    if(!req.user){
+        return res.redirect("/shop");
+    }
     Artikl.findById(req.params.id, function(err, pronadjenArtikl){
        if(err){
             console.log(err);
@@ -101,6 +107,9 @@ app.get("/shop/:id/edit", function(req, res) {
 });
     //update route
 app.put("/shop/:id", function(req,res){
+    if(!req.user){
+     return res.redirect("/shop");
+    }
     req.body.artikl.opis = req.sanitize(req.body.artikl.opis); 
     Artikl.findByIdAndUpdate(req.params.id,
     req.body.artikl,
@@ -117,6 +126,9 @@ app.put("/shop/:id", function(req,res){
 
     //destroy route
 app.delete("/shop/:id",function(req,res){
+    if(!req.user){
+     return res.redirect("/shop");
+    }
     Artikl.findByIdAndDelete(req.params.id,
     function(err,artikl){
         if(err){
@@ -134,22 +146,35 @@ app.delete("/shop/:id",function(req,res){
 /**************************** Novosti ***********************************/
      //Index route
 app.get("/novosti", function(req,res){
-   res.render("novosti"); 
+   
+    Novost.find({}, function(err, sveNovosti){
+        if(err) console.log(err);
+        
+        else  res.render("novosti",{novosti: sveNovosti});
+    });
 });
 
     //Create route
 app.post("/novosti",function(req,res){
-    req.body.artikl.opis = req.sanitize(req.body.artikl.opis); 
-    Artikl.create(
-    req.body.artikl,
-    function(err,noviArtikl){
+    req.body.novost.tekst = req.sanitize(req.body.novost.tekst); 
+    Novost.create(
+    req.body.novost,
+    function(err,novost){
         if(err)
             console.log("error");
         else   
-            console.log("Dodan novi artikl: " + noviArtikl);
+            console.log("Dodana novost: " + novost);
     });
     
-    res.redirect("/shop");
+    res.redirect("/novosti");
+});
+
+app.get("/novosti/new", function(req,res){
+    if(!req.user){
+    return res.redirect("/novosti");
+    }
+    
+   res.render("dodajNovost"); 
 });
 
 
@@ -160,6 +185,9 @@ app.post("/novosti",function(req,res){
 //AUTENTIKACIJSKE RUTE
 
 app.get("/register", function(req,res){
+    if(req.user){
+     return res.redirect("/");
+    }
    res.render("registration"); 
 });
 
