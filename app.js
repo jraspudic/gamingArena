@@ -38,6 +38,30 @@ app.use(function(req, res, next){
    res.locals.currentUser = req.user;
    next();
 });
+
+function isAdminShop(req,res,next){
+
+    if(req.user == undefined){
+        return res.redirect("/shop");
+    }
+    else if(req.user.isAdmin == false){
+        return res.redirect("/shop");
+    }
+    next();
+}
+
+function isAdminNovosti(req,res,next){
+
+    if(req.user == undefined){
+        return res.redirect("/novosti");
+    }
+    else if(req.user.isAdmin == false){
+        return res.redirect("/novosti");
+    }
+    next();
+}
+
+
 /*****************************************************************/
     //pocetna stranica
 app.get("/", function(req,res){
@@ -48,18 +72,14 @@ app.get("/", function(req,res){
     //Index route
 app.get("/shop", function(req,res){
     Artikl.find({}, function(err, sviArtikli){
-            console.log(sviArtikli[0]);
         if(err) console.log(err);
         
         else  res.render("shop",{artikli: sviArtikli});
     });
 });
     //Create route
-app.post("/shop",function(req,res){
-    if(!req.user){
-     return res.redirect("/shop");
-    }
-    //req.body.artikl.opis = req.sanitize(req.body.artikl.opis); 
+app.post("/shop", isAdminShop ,function(req,res){
+    req.body.artikl.opis = req.sanitize(req.body.artikl.opis); 
     Artikl.create(
     req.body.artikl,
     function(err,noviArtikl){
@@ -72,10 +92,7 @@ app.post("/shop",function(req,res){
     res.redirect("/shop");
 });
     //New route
-app.get("/shop/new", function(req,res){
-    if(!req.user){
-        return res.redirect("/shop");
-    }
+app.get("/shop/new", isAdminShop ,function(req,res){
    res.render("dodajArtikl"); 
 });
 
@@ -91,10 +108,7 @@ app.get("/shop/:id", function(req, res){
     });
 });
     //edit route
-app.get("/shop/:id/edit", function(req, res) {
-    if(!req.user){
-        return res.redirect("/shop");
-    }
+app.get("/shop/:id/edit", isAdminShop ,function(req, res) {
     Artikl.findById(req.params.id, function(err, pronadjenArtikl){
        if(err){
             console.log(err);
@@ -106,10 +120,7 @@ app.get("/shop/:id/edit", function(req, res) {
     });
 });
     //update route
-app.put("/shop/:id", function(req,res){
-    if(!req.user){
-     return res.redirect("/shop");
-    }
+app.put("/shop/:id", isAdminShop ,function(req,res){
     req.body.artikl.opis = req.sanitize(req.body.artikl.opis); 
     Artikl.findByIdAndUpdate(req.params.id,
     req.body.artikl,
@@ -125,10 +136,7 @@ app.put("/shop/:id", function(req,res){
 });
 
     //destroy route
-app.delete("/shop/:id",function(req,res){
-    if(!req.user){
-     return res.redirect("/shop");
-    }
+app.delete("/shop/:id", isAdminShop ,function(req,res){
     Artikl.findByIdAndDelete(req.params.id,
     function(err,artikl){
         if(err){
@@ -155,7 +163,7 @@ app.get("/novosti", function(req,res){
 });
 
     //Create route
-app.post("/novosti",function(req,res){
+app.post("/novosti", isAdminNovosti ,function(req,res){
     req.body.novost.tekst = req.sanitize(req.body.novost.tekst); 
     Novost.create(
     req.body.novost,
@@ -169,11 +177,8 @@ app.post("/novosti",function(req,res){
     res.redirect("/novosti");
 });
 
-app.get("/novosti/new", function(req,res){
-    if(!req.user){
-    return res.redirect("/novosti");
-    }
-    
+    //new route
+app.get("/novosti/new", isAdminNovosti ,function(req,res){
    res.render("dodajNovost"); 
 });
 
@@ -207,10 +212,13 @@ app.post("/register", function(req, res) {
 });
 
 app.get("/login", function(req,res){
+    if(req.user){
+     return res.redirect("/");
+    }
    res.render("login");
 });
 
-app.post("/login", passport.authenticate("local",
+app.post("/login",usernameToLowerCase, passport.authenticate("local",
     {
     successRedirect: "/shop",
     failureRedirect: "/login"    
@@ -219,6 +227,11 @@ app.post("/login", passport.authenticate("local",
     function(req,res){
    
 });
+
+function usernameToLowerCase(req,res,next){
+    req.body.username = req.body.username.toLowerCase();
+    next();
+}
 
 app.get("/logout", function(req, res){
     req.logout();

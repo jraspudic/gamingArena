@@ -4,7 +4,7 @@
 
 <%- include partials/nav.ejs %>
 
-<div class="header-overlay">
+            <div class="header-overlay">
             
                 <div class="container">
                 
@@ -17,12 +17,21 @@
                                    <div class="logoo">
                                     <img src="images/logo.png" class="logoa">
                                 </div>
-                                          <form action="/register" method="POST">
-                                            <input type="text" name="username" placeholder="Username" >
-                                            <input type="text" name="email" placeholder="E-mail" >
-                                            <input type="password" name="password" placeholder="Unesite lozinku" >
-                                            <input type="password" name="password_confirm" placeholder="Ponovo unesite lozinku" >
-                                            <input type="submit" name="login" class="login loginmodal-submit" value="register">
+                                          <form action="/register" method="POST" onsubmit="return regvalidation()">
+                                              
+                                            <input id="id_username" type="text" name="username" placeholder="Username" >
+                                                <span id="username_span"  style="color: red"></span>
+                                                
+                                            <input id="id_email" type="text" name="email" placeholder="E-mail" >
+                                                <span id="email_span"  style="color: red"></span>
+                                                
+                                            <input id="id_pass" type="password" name="password" placeholder="Unesite lozinku" >
+                                                <span id="pass_span"  style="color: red"></span>
+                                                
+                                            <input id="id_confim" type="password" name="password_confirm" placeholder="Ponovo unesite lozinku" >
+                                                <span id="confim_span"  style="color: red"></span>
+                                                
+                                           <input type="submit" name="login" class="login loginmodal-submit"  value="Registriraj se">
                                           </form>
 					
                                     <div class="login-help">
@@ -41,8 +50,7 @@
                 </div>
             
             </div>
-            
-        </header>
         
-        
+    <script src="js/registration.js"></script>
+    
 <%- include partials/footer.ejs %>

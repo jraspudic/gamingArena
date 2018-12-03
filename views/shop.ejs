@@ -10,27 +10,31 @@
                    
                 <div class="row">
                     
-                   <div class="col-md-12">
-                       
-                       <% if(currentUser){ %>
-                          <a href="shop/new"><button class="btn btn-warning">Dodaj artikl</button></a>
-                          <% } %>
-                          
-                   </div>
+                  
                    
                      <%   artikli.forEach(function(artikl){%>
                         <div class=" col-md-4">
-                          <a href="/shop/<%=artikl._id%>"> <img class="slika" src="<%- artikl.slika %>" alt="laptop"/></a>
+                          <a href="/shop/<%=artikl._id%>"> <img class="slika" src="<%- artikl.slika %>" alt="no image"/></a>
                             <div class="card">
                                 <h1 class="naslov-artikla"><%- artikl.naziv %></h1>
                                 <p class="cijena"><%- artikl.cijena %> €</p>
+                                 <% if(currentUser){ %>
                                 <button class="btn btn-kupi">Dodaj u košaricu</button>
-                            
+                                <% } %>
                             </div>
                     
                         </div>
                                     <% }); %>
-                       
+                                    
+                        <% if(currentUser){ if(currentUser.isAdmin == true){%>
+                        <div class=" col-md-4">
+                          <a href="/shop/new"> <img class="slika" src="/images/addArtikl.png" alt="no image"/></a>
+                            <div class="card">
+                                <h1 class="naslov-artikla">DODAJ ARTIKL</h1>
+                            </div>
+                    
+                        </div>
+                          <% }} %>
                          
                     </div>
                 </div>

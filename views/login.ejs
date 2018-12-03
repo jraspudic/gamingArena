@@ -4,8 +4,7 @@
 
 <%- include partials/nav.ejs %>
 
-
-<div class="header-overlay">
+    <div class="header-overlay">
             
                 <div class="container">
                 
@@ -18,13 +17,20 @@
                                   <div class="logoo">
                                     <img src="images/logo.png" class="logoa">
                                 </div>
-                                          <form action="/login" method="post" >
-                                            <input type="text" name="username" placeholder="username" >
+                                          <form action="/login" method="POST" onsubmit="return validation()" >
+                                              
+                                            <input id="id_username" type="text" name="username" placeholder="username" >
+                                                <span id="username_span"  style="color: red"></span>
                                           
-                                            <input type="password" name="password" placeholder="password" >
+                                            <input id="id_pass" type="password" name="password" placeholder="password" >
+                                                <span id="pass_span"  style="color: red"></span>
                                            
                                             <input type="submit" name="login" class="login loginmodal-submit" value="login">
                                           </form>
+					
+					 
+					
+					
 					
                                     <div class="login-help">
                                             <a href="/register">Nemate račun? Registrirajte se! </a> 
@@ -42,7 +48,7 @@
                 </div>
             
             </div>
-            
-        </header>
+
+<script src="js/login.js"></script>
 
 <%- include partials/footer.ejs %>

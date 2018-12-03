@@ -42,7 +42,7 @@
         padding-top: 50px;
     }
         
-    }
+    
                 
     .navbarr{
         background-color:cornflowerblue;
@@ -74,7 +74,7 @@
     
 }
 .navbar-default .navbar-nav > li > a:hover {
-    color: #black;
+    color: black;
 }
 
 .navbar-brand {
@@ -92,5 +92,7 @@
     background-color: transparent;
     color: #129CF3;
 }              
+
+
             
    

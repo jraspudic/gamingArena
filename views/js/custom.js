@@ -1,4 +1,4 @@
-/* Show and hide menu */
+/* Nav*/
 
 $(document).ready(function(){
    
@@ -56,8 +56,7 @@ $(document).ready(function(){
     });
     
     
-});
-//add smooth scrolling
+});//add smooth scrolling
 $(document).ready(function() {
     
     'use strict';
