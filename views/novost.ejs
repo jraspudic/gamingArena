@@ -9,23 +9,16 @@
                 <div class="containerr">
                     <div class="row">
                         
-                        <div class=" col-md-4">
-                            <img class="slika" src="<%=artikl.slika%>" alt="lila"/>
-                            <div class="card">
-                                <h1 class="naslov-artikla"> <%=artikl.naziv%></h1>
-                                <h2 class="cijena"> <%=artikl.cijena%> $ </h2>
-                                <button class="btn btn-kupi">Dodaj u košaricu</button>
-                          
-                            
-                            </div>
+                        <div class=" col-md-12">
+                            <img class="slika" src="<%=novost.thumbnail%>" alt="lila"/>
                     
                         </div>
                          <div class=" col-md-8">
                           <div class="card-opis-artikla">
-                                <h1 class="naslov-artikla-opem"><%=artikl.naziv%></h1>
+                                <h1 class="naslov-artikla-opem"><%=novost.naslov%></h1>
                                
                               <p>
-                                  <%=artikl.opis%>
+                                  <%=novost.tekst%>
                              </p>
                                 
                             
@@ -36,10 +29,10 @@
                            <div class=" col-md-8">
                         
                          
-                              <a href="<%=artikl._id%>/edit"><button type="button" class="btn btn-warning">Edituj artikl</button></a>
+                              <a href="<%=novost._id%>/edit"><button type="button" class="btn btn-warning">Edituj post</button></a>
         
-         <form action="/shop/<%=artikl._id%>?_method=DELETE" method="post">
-             <button type="submit" class="btn btn-danger" >Pobriši artikl</button>
+         <form action="/novosti/<%=novost._id%>?_method=DELETE" method="post">
+             <button type="submit" class="btn btn-danger" >Pobriši post</button>
         </form>
                             
                             
@@ -52,9 +45,3 @@
                
         </section>
         
-        
-
-
-
-
-

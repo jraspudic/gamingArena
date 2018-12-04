@@ -13,9 +13,9 @@ var express          = require("express"),
 
 mongoose.connect("mongodb://localhost:27017/gamingArena", { useNewUrlParser: true });
 
-app.use(express.static('views'));
-app.set("view engine", "ejs");
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static('views')); //omogucava serviranje statickih fajlova u browser
+app.set("view engine", "ejs");      //ne moras pisat .ejs ekstenziju kod renderanja
+app.use(bodyParser.urlencoded({extended: true})); 
 app.use(expressSanitizer());
 app.use(methodOverride("_method"));
 
@@ -182,6 +182,57 @@ app.get("/novosti/new", isAdminNovosti ,function(req,res){
    res.render("dodajNovost"); 
 });
 
+    //Show route
+app.get("/novosti/:id", function(req, res){
+     Novost.findById(req.params.id, function(err, pronadjenaNovost){
+        if(err){
+            console.log(err);
+        }
+        else{
+            res.render("novost",{novost: pronadjenaNovost});
+        }
+    });
+});
+    //edit route
+app.get("/novosti/:id/edit", isAdminNovosti ,function(req, res) {
+    Novost.findById(req.params.id, function(err, pronadjenaNovost){
+       if(err){
+            console.log(err);
+            res.redirect("/novosti");
+        }
+        else{
+            res.render("editNovost",{novost: pronadjenaNovost});
+        }
+    });
+});
+
+    //update route
+app.put("/novosti/:id", isAdminNovosti ,function(req,res){
+    Novost.findByIdAndUpdate(req.params.id,
+    req.body.novost,
+    function(err, novaNovost){
+        if(err){
+            console.log("error");
+        }
+        else   
+            console.log("Post ažuriran: " + novaNovost);
+    });
+    
+    res.redirect("/novosti");
+});
+
+app.delete("/novosti/:id", isAdminNovosti ,function(req,res){
+    Novost.findByIdAndDelete(req.params.id,
+    function(err,novost){
+        if(err){
+            console.log("error");
+        }
+        else   
+            console.log("Post izbrisan: " + novost);
+    });
+    
+    res.redirect("/novosti");
+});
 
 /*************************************************************************/
 

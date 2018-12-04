@@ -137,15 +137,7 @@ p {
 }
 /* O nama */
 
-.turniri {
-    padding-top: 30px;
-    
-}
 
-.shop {
-    
-    padding-top: 150px;
-}
 .o-nama {
     padding-top: 90px;
     padding-bottom: 50px;
@@ -169,6 +161,7 @@ p {
 .turniri {
     position: relative;
     text-align: center;
+    
 }
 .turniri div {
     text-align: center;
@@ -199,7 +192,7 @@ p {
     padding-bottom: 30px;
 }
 .shop div i {
-    font-size: 38px;
+    font-size: 35px;
     color: #129cf3;
     -webkit-transition: all 1s;
     -o-transition: all 1s;

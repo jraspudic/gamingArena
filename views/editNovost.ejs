@@ -1,0 +1,47 @@
+<%- include partials/header1v2.ejs %>
+     <link rel="stylesheet" type="text/css" href="/../css/style.css">
+<%- include partials/nav.ejs %>
+<style>
+  
+  .row{
+    padding-top:80px;
+    min-height: 100vh;
+  }
+  
+  h1,
+  h1 a:hover{
+    text-align:center;
+    text-decoration:none;
+  }
+  
+  
+  
+</style>
+<div ="container">
+  <div class="row">
+    
+    <h1><center>Dodaj novost</center></h1>
+    <div style="width: 30%; margin: 20px auto">
+      <form action="/novosti/<%=novost._id%>?_method=PUT" method="post">
+        
+        <div class="form-group">
+          <input class="form-control" type="text" name="novost[naslov]" value="<%=novost.naslov%>">
+        </div>
+        
+        <div class="form-group">
+          <input class="form-control" type="text" name="novost[thumbnail]" value="<%=novost.thumbnail%>">
+        </div>
+        
+        <div class="form-group">
+          <input class="form-control" type="text" name="novost[tekst]" value="<%=novost.tekst%>">
+        </div>
+        
+        
+        <div class="form-group">
+                  <button class="btn btn-lg btn-primary btn-block"> Submit </button>
+        </div>
+      </form>
+    </div>
+        <h1 ><a href="/novosti">Vrati se u novosti</a></h1>
+  </div>
+</div>

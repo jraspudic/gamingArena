@@ -1,4 +1,4 @@
-/* Nav*/
+/* Nav */
 
 $(document).ready(function(){
    
@@ -17,7 +17,7 @@ $(document).ready(function(){
             });
             
             $('.navbar-default').css({
-                'background-color': 'rgba(59, 60 ,59, 0.2)'
+                'background-color': 'rgba(59, 60 ,59, 0.3)'
                 
             });
             
@@ -36,27 +36,15 @@ $(document).ready(function(){
                 
                 
             });
-            
-            $('.navbar-brand img').css({
-               'height': '35px',
-                'padding-top': '0px'
-                
-            });
-            
-            $('.navbar-nav > li > a ').css({
-                'padding-top': '15px',
-               
-                
-            });
-            
-            
+         
         }
        
         
     });
     
     
-});//add smooth scrolling
+});
+//=========Scroll==================================
 $(document).ready(function() {
     
     'use strict';
@@ -77,7 +65,9 @@ $(document).ready(function() {
     
     
 });
-/*Active menu item on clikc*/
+
+
+/*Activni u meniu*/
 $(document).ready(function(){
     
     'use strict';
@@ -95,37 +85,3 @@ $(document).ready(function(){
     
 });
 
-// highlight menu item on scroll
-$(document).ready(function() {
-    
-    'use strict';
-    
-    $(window).scroll( function() {
-        
-        'use strict';
-        
-        $("section").each(function()  {
-            
-            'use strict';
-            
-            var bb = $(this).attr("id");  // ABOUT, CONTACT, DOWNLOAD
-            var hei = $(this).outerHeight();
-            var grttop = $(this).offset().top - 70;
-            
-            if ($(window).scrollTop() > grttop && $(window).scrollTop() < grttop + hei) {
-             
-                $(".navbar-nav li a[href='#" + bb + "']").parent().addClass("active");
-           
-            } else {
-                $(".navbar-nav li a[href='#" + bb + "']").parent().removeClass("active");
-                
-            }
-            
-            
-        });
-    
-    
-    });
-    
-    
-});
