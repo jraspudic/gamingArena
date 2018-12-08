@@ -26,6 +26,10 @@
                    
                   <ul class="nav navbar-nav navbar-right">
                        
+                        <% if(currentUser){ if(currentUser.isHeadAdmin == true){%>
+                            <li><a href="/korisnici" class="nav-item">Korisnici</a></li>
+                        <% }} %>
+                        
                         <li><a href="/#NASLOVNICA" class="nav-item">NASLOVNICA</a></li>
                         <li><a href="/#O-NAMA" class="nav-item">O NAMA</a></li>
                         <li><a href="/#PROGRAMI" class="nav-item">TEHNOLOGIJE</a></li>

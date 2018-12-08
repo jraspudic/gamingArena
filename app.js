@@ -14,12 +14,12 @@ var express          = require("express"),
 mongoose.connect("mongodb://localhost:27017/gamingArena", { useNewUrlParser: true });
 
 app.use(express.static('views')); //omogucava serviranje statickih fajlova u browser
-app.set("view engine", "ejs");      //ne moras pisat .ejs ekstenziju kod renderanja
+app.set("view engine", "ejs");     
 app.use(bodyParser.urlencoded({extended: true})); 
 app.use(expressSanitizer());
 app.use(methodOverride("_method"));
 
-//PASSPORT CONFIGURATION
+//PASSPORT CONFIGURATIONgit
 app.use(require("express-session")({
     secret: "bilo sta mozes ovdje napisat nije bitno",
     resave: false,
@@ -39,6 +39,15 @@ app.use(function(req, res, next){
    next();
 });
 
+function isHeadAdmin(req, res, next){
+    if(req.user == undefined){
+        return res.redirect("/");
+    }
+    else if(req.user.isHeadAdmin == false){
+        return res.redirect("/");
+    }
+    next();
+}
 function isAdminShop(req,res,next){
 
     if(req.user == undefined){
@@ -236,6 +245,49 @@ app.delete("/novosti/:id", isAdminNovosti ,function(req,res){
 
 /*************************************************************************/
 
+/************************* KORISNICI ************************************/
+
+app.get("/korisnici", isHeadAdmin, function(req, res){
+     User.find({}, function(err, sviKorisnici){
+        if(err) console.log(err);
+        
+        else  res.render("korisnici",{korisnici: sviKorisnici});
+    });
+});
+
+app.post("/korisnici/:id", isHeadAdmin, function(req, res){
+    
+    User.findByIdAndUpdate(req.params.id, {isAdmin: req.body.isAdminBtn}, function(err, korisnik){
+        
+        if(err){
+            console.log(err);
+        }
+        else{
+            if(req.body.isAdminBtn==true){
+                console.log(korisnik.username + " dodan kao admin");
+            }
+            else{
+                console.log(korisnik.username + " više nije admin");
+            }
+        }
+    });
+    
+    res.redirect("/korisnici");
+});
+
+app.delete("/korisnici/:id", isHeadAdmin, function(req,res){
+    User.findByIdAndDelete(req.params.id,
+    function(err, korisnik){
+        if(err){
+            console.log("error");
+        }
+        else   
+            console.log("Korisnik pobrisan: " + korisnik);
+    });
+    
+    res.redirect("/korisnici");
+});
+/*************************************************************************/
 
 
 //AUTENTIKACIJSKE RUTE
