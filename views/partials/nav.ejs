@@ -16,20 +16,13 @@
                     </div>
                 <div class="collapse navbar-collapse" id="gamingarena-navbar-collapse-1">
                    
-                   <% if(currentUser){ %>
                    
-                      <ul class="nav navbar-nav navbar-left">
-                           
-                            <li><a href="#" class="nav-item">Ulogiran kao <%=currentUser.username%></a></li>
-                      </ul>
-                     <% } %>
                    
                   <ul class="nav navbar-nav navbar-right">
                        
                         <% if(currentUser){ if(currentUser.isHeadAdmin == true){%>
                             <li><a href="/korisnici" class="nav-item">Korisnici</a></li>
                         <% }} %>
-                        
                         <li><a href="/#NASLOVNICA" class="nav-item">NASLOVNICA</a></li>
                         <li><a href="/#O-NAMA" class="nav-item">O NAMA</a></li>
                         <li><a href="/#PROGRAMI" class="nav-item">TEHNOLOGIJE</a></li>
@@ -40,7 +33,13 @@
                         <li><a href="/login" class="nav-item">LOGIN</a></li>
                        <% }
                         else{   %>
-                        <li><a href="/logout" class="nav-item">LOGOUT</a></li>
+                        <% if(currentUser){ %>
+                   
+                      <ul class="nav navbar-nav navbar-left">
+                           
+                            <li><a href="/logout" class="nav-item">Ulogiran kao <%=currentUser.username%></a></li>
+                      </ul>
+                     <% } %>
                       <%    }   %>
                   </ul>
                 </div><!-- /.navbar-collapse -->

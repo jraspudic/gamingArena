@@ -6,15 +6,36 @@
    
         <section id="shop">
            
-            <div class="container">
+            <div class="containerr">
                    
-                <div class="row">
-                    
-                  
-                   
-                     <%   artikli.forEach(function(artikl){%>
-                        <div class=" col-md-4">
-                          <a href="/shop/<%=artikl._id%>"> <img class="slika" src="<%- artikl.slika %>" alt="no image"/></a>
+                <div class="roww">
+                    <div class="col-md-2">
+                        <div class="btn-group">
+                            <form metod="GET" action="/shop">
+                                
+                              Miševi<input type="checkbox" name="search" value="mis"><br>
+                              Tipkovnice<input type="checkbox" name="search" value="tipkovnica"><br>
+                              Slušalice<input type="checkbox" name="search" value="slusalice"><br>
+                              Ostalo<input type="checkbox" name="search" value="ostalo"><br>
+                              
+                              <button type="submit">Pretraži</button>
+                            </form>
+                            
+                            </div>
+                            
+
+ 
+
+</div>
+
+
+                            
+                            
+                        </div>
+                  <div class="col-md-10"><%   artikli.forEach(function(artikl){%>
+                        <div class="col-md-4 okvir1">
+                            <div class="okvir2">
+                              <div class="out-div"><a href="/shop/<%=artikl._id%>"> <img class="slika" src="<%- artikl.slika %>" alt="no image"/></a></div> 
                             <div class="card">
                                 <h1 class="naslov-artikla"><%- artikl.naziv %></h1>
                                 <p class="cijena"><%- artikl.cijena %> €</p>
@@ -23,22 +44,46 @@
                                 <% } %>
                             </div>
                     
-                        </div>
+                      
+                                </div>
+                           
+                            </div>
+                        
                                     <% }); %>
                                     
+                                   
+                                    
                         <% if(currentUser){ if(currentUser.isAdmin == true){%>
-                        <div class=" col-md-4">
-                          <a href="/shop/new"> <img class="slika" src="/images/addArtikl.png" alt="no image"/></a>
+                        <div class="col-md-4">
+                          <a href="/shop/new"> <img class="plus" src="/images/addArtikl.png" alt="no image"/></a>
                             <div class="card">
                                 <h1 class="naslov-artikla">DODAJ ARTIKL</h1>
                             </div>
                     
                         </div>
-                          <% }} %>
-                         
+                          <% }} %></div>
+                   
                     </div>
+                    
                 </div>
-        </section>
-        
+                
+     </section>
+        <footer class="footer">
+           
+                    <div class="col-md-6">
+                        <div id="copyright">
+                            <p>Copyright &copy; 2018 <a href="#"> - Gaming Arena</a></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="scroll-top">
+                            <a href="#NASLOVNICA" class="scroll-to-top"><i class="fa fa-angle-up"></i></a>
+                        </div>
+                 
+            </div>
+        </footer>
+  
+</div>
+
 <%- include partials/footer.ejs %>     
 

@@ -50,22 +50,20 @@ p {
 } 
 
 /* Header */
+#NASLOVNICA{
+    min-height:100vh;
+}
 .header {
     background-image: url("../images/header-bg.png");
     background-attachment: fixed;
-    max-height: 100vh;
+   
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
 
     
 }
-.header-overlay {
-    background-color: rgba(31, 31, 31, 0.3);
-    min-height: 100vh;
-     
 
-}
 .logo {
     display: table;
     margin: 0 auto;
@@ -100,6 +98,7 @@ p {
     padding-left: 30px;
     padding-right: 30px;
     font-size: 19px;
+    
     text-transform: uppercase;
     border-radius: 3px;
     transition: all 1s;
@@ -116,11 +115,13 @@ p {
 .btn-sazn:focus,
 .btn-sazn:active,
 .btn-sazn:visited{
-    color: #A9ADB0;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    font-weight: bold;
+    color: #FFF;
     margin-left: 20px;
     text-transform: uppercase;
     font-size: 19px;
-    font-weight: 500;
+    
     background: transparent;
     -webkit-transition: all 1s;
     -moz-transition: all 1s;
@@ -295,9 +296,54 @@ p {
 
 
 
+.arrow-down{
+  
+    position: absolute;
+       left:50%;
+       bottom:10%;
+      
+   
+ 
+}
+.arrow-down::after{
+ 
+    content:"";
+    width:30px;
+    height:30px;
+    position:absolute;
+    margin:auto;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    border-right:5px solid  #129CF3;
+    border-bottom:5px solid  #129CF3;
+    -webkit-transform:rotate(45deg);
+    transform:rotate(45deg);
+    -webkit-animation: 2s arrow infinite ease;
+    animation:2s arrow infinite ease;
+    
+}
 
 
 
 
 
+
+@-webkit-keyframes arrow{
+    0%,100%{
+        top: 50px;
+    }
+    50%{
+        top: 80px;
+    }
+}
+@keyframes arrow{
+    0%,100%{
+        top:50px;
+    }
+    50%{
+        top:80px;
+    }
+}
 

@@ -36,6 +36,13 @@
           <input class="form-control" type="text" name="artikl[slika]" value="<%=artikl.slika%>">
         </div>
         
+        <select name="artikl[kategorija]">
+          <option value="mis">mis</option>
+          <option value="tipkovnica">tipkovnica</option>
+          <option value="slusalice">slusalice</option>
+          <option value="ostalo">ostalo</option>
+        </select>
+        
         <div class="form-group">
           <textarea class="form control" name="artikl[opis]" rows="10" cols="30" ><%=artikl.opis%></textarea>
         </div>

@@ -10,6 +10,7 @@ var express          = require("express"),
     Artikl           = require("./models/artikl"),
     Novost           = require("./models/novost");
     
+    
 
 mongoose.connect("mongodb://localhost:27017/gamingArena", { useNewUrlParser: true });
 
@@ -18,6 +19,8 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true})); 
 app.use(expressSanitizer());
 app.use(methodOverride("_method"));
+
+const ITEMS_PER_PAGE = 2;
 
 //PASSPORT CONFIGURATIONgit
 app.use(require("express-session")({
@@ -69,7 +72,10 @@ function isAdminNovosti(req,res,next){
     }
     next();
 }
-
+/*************************************************************************/
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 /*****************************************************************/
     //pocetna stranica
@@ -77,15 +83,31 @@ app.get("/", function(req,res){
    res.render("pocetna"); 
 });
 
+/*****************************************************************/
+app.get("/kosarica",function(req, res) {
+    res.render("kosarica");
+})
+
+
 /***************************** SHOP *************************************/
     //Index route
 app.get("/shop", function(req,res){
-    Artikl.find({}, function(err, sviArtikli){
+    if(Object.keys(req.query).length === 0){
+    Artikl.find({}, function(err, sviArtikli){ 
         if(err) console.log(err);
         
         else  res.render("shop",{artikli: sviArtikli});
     });
+    }
+    else{
+        Artikl.find({kategorija: { $in: req.query.search }}, function(err, sviArtikli){ 
+        if(err) console.log(err);
+        
+        else  res.render("shop",{artikli: sviArtikli});
+    });
+    }
 });
+
     //Create route
 app.post("/shop", isAdminShop ,function(req,res){
     req.body.artikl.opis = req.sanitize(req.body.artikl.opis); 
@@ -158,18 +180,34 @@ app.delete("/shop/:id", isAdminShop ,function(req,res){
     res.redirect("/shop");
 });
 
-/*************************************************************************/
 
 /**************************** Novosti ***********************************/
      //Index route
-app.get("/novosti", function(req,res){
-   
-    Novost.find({}, function(err, sveNovosti){
+app.get("/novosti", function(req, res) {
+    var noMatch = null;
+    if (req.query.search) {
+       const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+       Novost.find({ "naslov": regex }, function(err, sviArtikli) {
+           if(err) {
+               console.log(err);
+           } else {
+                   res.render("novosti", { novosti: sviArtikli });
+           }
+       }); 
+    }else{
+Novost.find({}, function(err, sveNovosti){
         if(err) console.log(err);
         
-        else  res.render("novosti",{novosti: sveNovosti});
-    });
-});
+        else  {
+            
+          //  res.render("novosti",{novosti: sveNovosti});  
+            res.render("novosti",{novosti:sveNovosti, noMatch: noMatch});
+            
+        }
+        });
+    }
+});  
+
 
     //Create route
 app.post("/novosti", isAdminNovosti ,function(req,res){
@@ -257,13 +295,14 @@ app.get("/korisnici", isHeadAdmin, function(req, res){
 
 app.post("/korisnici/:id", isHeadAdmin, function(req, res){
     
-    User.findByIdAndUpdate(req.params.id, {isAdmin: req.body.isAdminBtn}, function(err, korisnik){
-        
+    var toggleAdmin = (req.body.isAdminBtn=="true");
+    
+    User.findByIdAndUpdate(req.params.id, {isAdmin: toggleAdmin}, function(err, korisnik){
         if(err){
             console.log(err);
         }
         else{
-            if(req.body.isAdminBtn==true){
+            if(toggleAdmin==true){
                 console.log(korisnik.username + " dodan kao admin");
             }
             else{
@@ -341,8 +380,12 @@ app.get("/logout", function(req, res){
     res.redirect("/");
 });
 
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 
 app.listen(8081, process.env.IP, function(){
     console.log("server started");
 });
+
