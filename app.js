@@ -8,16 +8,23 @@ var express          = require("express"),
     User             = require("./models/user"),
     methodOverride   = require("method-override"),
     Artikl           = require("./models/artikl"),
-    Novost           = require("./models/novost");
+    Novost           = require("./models/novost"),
+    session          = require('express-session');
+   
     
 var shopRoutes      = require("./routes/shop"),
     novostiRoutes   = require("./routes/novosti"),
     indexRoutes     = require("./routes/index")
 
+    var MongoStore = require('connect-mongo')(session);
+
 mongoose.connect("mongodb://localhost:27017/gamingArena", { useNewUrlParser: true });
 
 app.use(express.static('views')); //omogucava serviranje statickih fajlova u browser
-app.set("view engine", "ejs");     
+app.set("view engine", "ejs");
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(bodyParser.urlencoded({extended: true})); 
 app.use(expressSanitizer());
 app.use(methodOverride("_method"));
@@ -28,7 +35,11 @@ const ITEMS_PER_PAGE = 2;
 app.use(require("express-session")({
     secret: "bilo sta mozes ovdje napisat nije bitno",
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+      store: new MongoStore({
+        mongooseConnection: mongoose.connection }),
+        cookie: { maxAge: 1 * 6 * 1 }
+    
 }));
 
 app.use(passport.initialize());
@@ -41,6 +52,7 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use(function(req, res, next){
    res.locals.currentUser = req.user;
+   res.locals.session=req-session;
    next();
 });
 

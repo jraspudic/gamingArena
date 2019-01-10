@@ -1,0 +1,80 @@
+ <% include partials/header1.ejs %>
+  <link rel="stylesheet" type="text/css" href="../css/novosti.css">
+  <link rel="stylesheet" type="text/css" href="../css/shop.css">
+<% include partials/nav.ejs %>
+
+<style>
+table {
+  width:100%;
+  margin-top: 100px;
+}
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 15px;
+  text-align: left;
+}
+table tr:nth-child(even) {
+  background-color: #eee;
+}
+table tr:nth-child(odd) {
+ background-color: #fff;
+}
+table th {
+  background-color: blue;
+  color: white;
+}
+</style>
+
+    
+<table style="width:100%">
+  <tr>
+    <th>Username</th>
+    <th>E-mail</th> 
+    <th>isAdmin</th>
+    <th>Pobriši korisnika</th>
+  </tr>
+  <% korisnici.forEach(function(korisnik){ %>
+  
+    <tr>
+        
+        <% if(korisnik.isAdmin==true){%>
+        <td> <%=korisnik.username%> </td>
+        <td> <%=korisnik.email%> </td>
+        <td> <%=korisnik.isAdmin%> 
+        
+        <%if(korisnik.isHeadAdmin == false){%>
+        <form action="/admini/<%=korisnik._id%>" method="POST">
+        <% if(korisnik.isAdmin == false){ %>
+            <button type="submit" class="btn btn-success" name="isAdminBtn" value="true">Postavi za admina</button>
+        <% } else{ %>
+            <button type="submit" class="btn btn-warning" name="isAdminBtn" value="false">Skini admina</button>
+        <% } %>
+        
+        </form>
+        <% } %>
+        </td>
+       
+        
+        
+        <td>
+             <%if(korisnik.isHeadAdmin == false){%>
+             <% if(korisnik.isAdmin==true){%>
+             <form action="/admini/<%=korisnik._id%>?_method=DELETE" method="POST">
+             <button type="submit" class="btn btn-danger"> Pobriši korisnika </button>
+             <% } %>
+        
+             </form>
+             <% } %>
+        </td>
+         <% } %>
+    </tr>
+    
+  <% }); %>
+
+</table>
+
+</div>
+<%- include partials/footer.ejs %>    

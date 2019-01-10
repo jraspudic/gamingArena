@@ -3,17 +3,123 @@ var router       = express.Router();
 var User         = require("../models/user");
 var passport     = require("passport");
 
+var Artikl = require("../models/artikl");
+var Cart = require("../models/cart");
+var Order = require("../models/order");
+
+
 router.get("/", function(req,res){
    res.render("pocetna"); 
 });
 
+router.get("/index", function(req,res){
+   res.render("index"); 
+});
+
+/*============================================================*/
+router.get("/shopping-cart", function(req,res){
+   res.render("shopping-cart"); 
+});
+router.get('/shop/:id', function (req, res) {
+    
+    var cart = new Cart(req.session.cart ? req.session.cart : {});
+    
+    Artikl.findById(req.params.id, function (err, oneProduct) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("KUPIO SI ");
+            cart.add(oneProduct, oneProduct.id);
+            req.session.cart = cart;
+            console.log(req.session.cart);
+            
+            res.redirect("/");
+            
+        }
+    });
+});
+//add one more unit in shopping-cart
+router.get('/shop/:id/add', function (req, res) {
+    var cart = new Cart(req.session.cart ? req.session.cart : {});
+    Artikl.findById(req.params.id, function (err, oneProduct) {
+        if (err) {
+            console.log(err);
+        } else {
+            cart.add(oneProduct, oneProduct.id);  // adding the product to cart
+            req.session.cart = cart; //store cart object in session,,we dont need to save beacuse session automatically saving 
+            //req.flash('success', `Successfully added ${oneProduct.title} to your cart.`);
+            res.redirect("/");
+        }
+    });
+});
+//get shopping-cart
+router.get("/shopping-cart", function (req, res) {
+    if (!req.session.cart) {
+         console.log("prazna");
+        return res.render("/shopping-cart", { artikli: null });
+       
+    } else {
+        console.log("puna")
+        var cart = new Cart(req.session.cart);
+        res.render("/shopping-cart", { artikli: cart.generateArray(), totalPrice: cart.totalPrice });
+    }
+});
+
+
+
+
+/*==================================================================*/
+router.get("/admin-panel", function(req,res){
+   res.render("admin-panel"); 
+});
 /*****************************************************************/
-router.get("/kosarica",function(req, res) {
-    res.render("kosarica");
-})
+router.get("/admini", isHeadAdmin, function(req, res){
+     User.find({}, function(err, sviKorisnici){
+        if(err) console.log(err);
+        
+        else  res.render("admini",{korisnici: sviKorisnici});
+    });
+});
+
+router.post("/admini/:id", isHeadAdmin, function(req, res){
+    
+    var toggleAdmin = (req.body.isAdminBtn=="true");
+    
+    User.findByIdAndUpdate(req.params.id, {isAdmin: toggleAdmin}, function(err, korisnik){
+        if(err){
+            console.log(err);
+        }
+        else{
+            if(toggleAdmin==true){
+                console.log(korisnik.username + " dodan kao admin");
+            }
+            else{
+                console.log(korisnik.username + " više nije admin");
+            }
+        }
+    });
+    
+    res.redirect("/admini");
+});
+
+router.delete("/admini/:id", isHeadAdmin, function(req,res){
+    User.findByIdAndDelete(req.params.id,
+    function(err, korisnik){
+        if(err){
+            console.log("error");
+        }
+        else   
+            console.log("Korisnik pobrisan: " + korisnik);
+    });
+    
+    res.redirect("/admini");
+});
 
 
 
+
+
+/*==========================0*/
 
 router.get("/korisnici", isHeadAdmin, function(req, res){
      User.find({}, function(err, sviKorisnici){

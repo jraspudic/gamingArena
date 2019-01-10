@@ -1,9 +1,65 @@
 var express  = require("express");
 var router   = express.Router();
-var Artikl   = require("../models/artikl");
+//var geocoder   = require("geocoder");
 
 
 
+var Artikl = require("../models/artikl");
+var Cart = require("../models/cart");
+var User = require("../models/user");
+var Order = require("../models/order");
+
+// helper to handle fuzzy search
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
+
+
+        
+/*=================================================================*/
+router.get("/", function(req, res) {
+    var perPage = 9;
+    var pageQuery = parseInt(req.query.page, 10);
+    var pageNum = (pageQuery && pageQuery >= 1) ? pageQuery : 1;
+    var noMatch = false;
+    
+    if (req.query.search) {
+        Artikl.find({kategorija: { $in: req.query.search }}, function(err, sviArtikli){ 
+        if(err) console.log(err);
+        
+        else  res.render("shop",{artikli: sviArtikli});
+    });
+    } else  {
+        Artikl.find({}).skip((pageNum - 1) * perPage).limit(perPage).exec(function(err, artikli){
+            if (err || !artikli) {
+               req.flash("error", "Something Went Wrong");
+                return res.redirect("/shop");
+            }
+            Artikl.count().exec(function(err, count) {
+                var totalPages = Math.ceil(count / perPage);
+                
+                if (err) {
+                   req.flash("error", "Something Went Wrong");
+                    res.redirect("/shop");
+                } else if (pageNum < 1 || pageNum > totalPages) {
+                    //req.flash("error", "Page Index Out of Range"); //pado server zbog ovog :D
+                     res.redirect("/shop");
+                } else {
+                    
+                    res.render("shop", {
+                        artikli: artikli, 
+                        page: "shop",
+                        search: false,
+                        current: pageNum,
+                        totalPages: totalPages
+                    });
+                    
+                }
+            });
+        });
+    } 
+});
+/*==================================================================*/
     //Index route
 function isAdminShop(req,res,next){
 
@@ -16,7 +72,7 @@ function isAdminShop(req,res,next){
     next();
 }
 
-
+/*
 router.get("/", function(req,res){
     if(Object.keys(req.query).length === 0){
     Artikl.find({}, function(err, sviArtikli){ 
@@ -32,7 +88,7 @@ router.get("/", function(req,res){
         else  res.render("shop",{artikli: sviArtikli});
     });
     }
-});
+});*/
 
     //Create route
 router.post("/", isAdminShop ,function(req,res){

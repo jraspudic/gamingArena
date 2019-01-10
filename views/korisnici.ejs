@@ -1,48 +1,75 @@
-<%- include partials/header1.ejs %>
-<%- include partials/nav.ejs %>
+ <% include partials/header1.ejs %>
+  <link rel="stylesheet" type="text/css" href="../css/novosti.css">
+  <link rel="stylesheet" type="text/css" href="../css/shop.css">
+<% include partials/nav.ejs %>
+
 
 <style>
-table {
-  width:100%;
-  margin-top: 100px;
+
+
+
+.cont th h1 {
+	  font-weight: bold;
+	  font-size: 1em;
+   text-align: left;
+   color: #185875;
 }
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
+
+
+.cont {
+	   text-align: left;
+	   overflow: hidden;
+	    width: 70%;
+	    margin: 0 auto;
+     display: table;
+     
 }
-th, td {
-  padding: 15px;
-  text-align: left;
+
+.cont td, .cont th {
+	  padding-bottom: 1%;
+	  padding-top: 1%;
+    padding-left:1.4%;  
 }
-table tr:nth-child(even) {
-  background-color: #eee;
+
+.cont th {
+	  background-color:#33BDE3;
 }
-table tr:nth-child(odd) {
- background-color: #fff;
+
+.cont tr:hover {
+   background-color: #464A52;
+   -webkit-box-shadow: 0 6px 6px -6px #0E1119;
+	   -moz-box-shadow: 0 6px 6px -6px #0E1119;
+	   box-shadow: 0 6px 6px -6px #0E1119;
+	   color:white;
 }
-table th {
-  background-color: blue;
-  color: white;
+.tablica{
+  padding-top:100px;
 }
+
+
+
+
 </style>
 
-    
-<table style="width:100%">
-  <tr>
-    <th>Username</th>
-    <th>E-mail</th> 
-    <th>isAdmin</th>
-    <th>Pobriši korisnika</th>
-  </tr>
-  <% korisnici.forEach(function(korisnik){ %>
-  
-    <tr>
-        
-        <td> <%=korisnik.username%> </td>
+<div class="col-md-12 tablica" >
+<table class="cont">
+	<thead>
+		<tr>
+			<th ><h1>Username</h1></th>
+			<th><h1>E-mail</h1></th>
+			<th><h1 >Admin</h1></th>
+			<th><h1>Brisanje</h1></th>
+		</tr>
+	</thead>
+	 <% korisnici.forEach(function(korisnik){ %>
+	
+	
+	<tbody>
+		<tr>
+		<td> <%=korisnik.username%> </td>
         <td> <%=korisnik.email%> </td>
         <td> <%=korisnik.isAdmin%> 
-        
-        <%if(korisnik.isHeadAdmin == false){%>
+         <%if(korisnik.isHeadAdmin == false){%>
         <form action="/korisnici/<%=korisnik._id%>" method="POST">
         <% if(korisnik.isAdmin == false){ %>
             <button type="submit" class="btn btn-success" name="isAdminBtn" value="true">Postavi za admina</button>
@@ -52,9 +79,6 @@ table th {
         
         </form>
         <% } %>
-        </td>
-        
-        
         <td>
              <%if(korisnik.isHeadAdmin == false){%>
              <form action="/korisnici/<%=korisnik._id%>?_method=DELETE" method="POST">
@@ -62,12 +86,10 @@ table th {
              </form>
              <% } %>
         </td>
-        
-    </tr>
-    
-  <% }); %>
+		</tr>
+	
+	</tbody>
+	<% }); %>
 
 </table>
-
 </div>
-<%- include partials/footer.ejs %>    
