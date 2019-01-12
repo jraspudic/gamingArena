@@ -1,8 +1,5 @@
 var express  = require("express");
 var router   = express.Router();
-//var geocoder   = require("geocoder");
-
-
 
 var Artikl = require("../models/artikl");
 var Cart = require("../models/cart");
@@ -15,23 +12,82 @@ function escapeRegex(text) {
 };
 
 
-        
+ router.get('/:id/buy', function (req, res) {
+    var cart = new Cart(req.session.cart ? req.session.cart : {});
+    Artikl.findById(req.params.id, function (err, oneProduct) {
+        if (err) {
+            console.log(err);
+        } else {
+            cart.add(oneProduct, oneProduct.id);// adding the product to cart
+            req.session.cart = cart; //store cart object in session,,we dont need to save beacuse session automatically saving 
+            //req.flash('success', `Successfully added ${oneProduct.title} to your cart.`);
+            console.log("Kupljeno");
+            res.redirect("/shop/shopping-cart");
+        }
+    });
+});
+//add one more unit in shopping-cart
+router.get('/:id/add', function (req, res) {
+    var cart = new Cart(req.session.cart ? req.session.cart : {});
+    Artikl.findById(req.params.id, function (err, oneProduct) {
+        if (err) {
+            console.log(err);
+        } else {
+            cart.add(oneProduct, oneProduct.id);  // adding the product to cart
+            req.session.cart = cart; //store cart object in session,,we dont need to save beacuse session automatically saving 
+            //req.flash('success', `Successfully added ${oneProduct.title} to your cart.`);
+            console.log("2x2");
+            res.redirect("/shop/shopping-cart");
+        }
+    });
+});
+
+router.get("/shopping-cart", function (req, res) {
+    if (!req.session.cart) {
+        res.render("shopping-cart", { products: null });
+    } else {
+        var cart = new Cart(req.session.cart);
+         console.log(cart.totalPrice);
+        res.render("shopping-cart", { products: cart.generateArray(), totalPrice: cart.totalPrice });
+       
+    }
+});
 /*=================================================================*/
 router.get("/", function(req, res) {
-    var perPage = 9;
+    var perPage = 6;
     var pageQuery = parseInt(req.query.page, 10);
     var pageNum = (pageQuery && pageQuery >= 1) ? pageQuery : 1;
     var noMatch = false;
     
     if (req.query.search) {
-        Artikl.find({kategorija: { $in: req.query.search }}, function(err, sviArtikli){ 
-        if(err) console.log(err);
+        Artikl.find({kategorija: { $in: req.query.search }}).skip((pageNum - 1) * perPage).limit(perPage).exec(function(err, artikl){
+            if (err || !artikl) {
+               req.flash("error", "Something Went Wrong");
+                return res.redirect("/shop");
+            }
+                var count = artikl.length
+                var totalPages = Math.ceil(count / perPage);
+                
+                 if (pageNum < 1 || pageNum > totalPages) {
+                    //req.flash("error", "Page Index Out of Range"); //pado server zbog ovog :D xD
+                     res.redirect("/shop");
+                } else {
+                    
+                    res.render("shop", {
+                        artikl: artikl, 
+                        page: "shop",
+                        search: false,
+                        current: pageNum,
+                        totalPages: totalPages
+                    });
+                    
+                }
+            });
+        }
         
-        else  res.render("shop",{artikli: sviArtikli});
-    });
-    } else  {
-        Artikl.find({}).skip((pageNum - 1) * perPage).limit(perPage).exec(function(err, artikli){
-            if (err || !artikli) {
+    else  {
+        Artikl.find({}).skip((pageNum - 1) * perPage).limit(perPage).exec(function(err, artikl){
+            if (err || !artikl) {
                req.flash("error", "Something Went Wrong");
                 return res.redirect("/shop");
             }
@@ -47,7 +103,7 @@ router.get("/", function(req, res) {
                 } else {
                     
                     res.render("shop", {
-                        artikli: artikli, 
+                        artikl: artikl, 
                         page: "shop",
                         search: false,
                         current: pageNum,
@@ -60,7 +116,7 @@ router.get("/", function(req, res) {
     } 
 });
 /*==================================================================*/
-    //Index route
+    
 function isAdminShop(req,res,next){
 
     if(req.user == undefined){
@@ -72,20 +128,22 @@ function isAdminShop(req,res,next){
     next();
 }
 
+/*==========================================================================*/
+
 /*
 router.get("/", function(req,res){
     if(Object.keys(req.query).length === 0){
-    Artikl.find({}, function(err, sviArtikli){ 
+    artikl.find({}, function(err, sviartikl){ 
         if(err) console.log(err);
         
-        else  res.render("shop",{artikli: sviArtikli});
+        else  res.render("shop",{artikl: sviartikl});
     });
     }
     else{
-        Artikl.find({kategorija: { $in: req.query.search }}, function(err, sviArtikli){ 
+        artikl.find({kategorija: { $in: req.query.search }}, function(err, sviartikl){ 
         if(err) console.log(err);
         
-        else  res.render("shop",{artikli: sviArtikli});
+        else  res.render("shop",{artikl: sviartikl});
     });
     }
 });*/
@@ -95,40 +153,40 @@ router.post("/", isAdminShop ,function(req,res){
     req.body.artikl.opis = req.sanitize(req.body.artikl.opis); 
     Artikl.create(
     req.body.artikl,
-    function(err,noviArtikl){
+    function(err,noviartikl){
         if(err)
             console.log("error");
         else   
-            console.log("Dodan novi artikl: " + noviArtikl);
+            console.log("Dodan novi artikl: " + noviartikl);
     });
     
     res.redirect("/shop");
 });
     //New route
 router.get("/new", isAdminShop ,function(req,res){
-   res.render("dodajArtikl"); 
+   res.render("dodajartikl"); 
 });
 
     //Show route
 router.get("/:id", function(req, res){
-     Artikl.findById(req.params.id, function(err, pronadjenArtikl){
+     Artikl.findById(req.params.id, function(err, pronadjenartikl){
         if(err){
             console.log(err);
         }
         else{
-            res.render("artikl",{artikl: pronadjenArtikl});
+            res.render("artikl",{artikl: pronadjenartikl});
         }
     });
 });
     //edit route
 router.get("/:id/edit", isAdminShop ,function(req, res) {
-    Artikl.findById(req.params.id, function(err, pronadjenArtikl){
+    Artikl.findById(req.params.id, function(err, pronadjenartikl){
        if(err){
             console.log(err);
             res.redirect("/shop");
         }
         else{
-            res.render("editArtikl",{artikl: pronadjenArtikl});
+            res.render("editartikl",{artikl: pronadjenartikl});
         }
     });
 });
@@ -137,12 +195,12 @@ router.put("/:id", isAdminShop ,function(req,res){
     req.body.artikl.opis = req.sanitize(req.body.artikl.opis); 
     Artikl.findByIdAndUpdate(req.params.id,
     req.body.artikl,
-    function(err,noviArtikl){
+    function(err,noviartikl){
         if(err){
             console.log("error");
         }
         else   
-            console.log("Artikl ažuriran: " + noviArtikl);
+            console.log("artikl ažuriran: " + noviartikl);
     });
     
     res.redirect("/shop");
@@ -156,7 +214,7 @@ router.delete("/:id", isAdminShop ,function(req,res){
             console.log("error");
         }
         else   
-            console.log("Artikl pobrisan: " + artikl);
+            console.log("artikl pobrisan: " + artikl);
     });
     
     res.redirect("/shop");

@@ -1,5 +1,7 @@
 <%- include partials/header1.ejs %>
 
+    <link rel="stylesheet" type="text/css" href="css/shop.css">
+<%- include partials/nav.ejs %>
 <div class="container mt-3 ">
     <div class="row justify-content-center">
         <div class="col-md-10 p-3" style="background:#71a4f7">
@@ -13,23 +15,23 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-md-10" style="border: 1px ridge #d1e2ff">
-            <% if(0){ %>
-            <% artikli.forEach(function(artikl){%>       
+            <% if(products){ %>
+            <% products.forEach(function(product){ %>       
             <div class="row">
                 <div class="col-md-2">
-                    <img class="img-thumbnail m-3" style="max-width:100px" src="<%= artikl.item.image %>" alt="Card image cap">
+                    <img class="img-thumbnail m-3" style="max-width:100px" src="<%= product.item.slika %>" alt="Card image cap">
                 </div>
                 <div class="col-md-5 my-auto">
-                    <h5><%= product.item.title %></h5>
-                    <p class="text-muted"><%= product.item.description %> </p>
+                    <h5><%= product.item.naziv %></h5>
+                     
                 </div>
                 <div class="col-md-5 form-inline justify-content-end btn-group">
-                    <h5><%= product.price %> $</h5> &nbsp;&nbsp;&nbsp;&nbsp;
+                    <h5><%= product.item.cijena %> $</h5> &nbsp;&nbsp;&nbsp;&nbsp;
                     <a class="btn btn-info" href="/product/<%= product.item._id %>/add" aria-label="add">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>&nbsp;&nbsp;&nbsp;&nbsp;
                     <button class="btn btn-secondary"  aria-label="">
-                        <%= product.qty %>
+                      Komada  <%= product.qty %> 
                     </button>&nbsp;&nbsp;&nbsp;&nbsp;
                     <a class="btn btn-danger" href="/shopping-cart/<%= product.item._id %>/deleteone" aria-label="deleteOne">
                         <i class="fa fa-minus" aria-hidden="true"></i>
@@ -38,10 +40,8 @@
                 </div>
             </div>
            <% }); %>
-
         </div>
     </div>
-
     <div class="row justify-content-center">
         <div class="col-md-10 p-3 form-inline justify-content-end" style="background:#ededed">
             <div class="" style="font-size:20px">
@@ -49,7 +49,6 @@
             </div> &nbsp;&nbsp; &nbsp;&nbsp;
             <% }else{ %>
             <!--IF DONT HAVE ANYTHING IN CART-->
-            <%= totalPrice %> =
             <div class="p-5 text-center"> <strong>You don't have anything in cart. Add items!</strong></div>
             <% } %>
             <div class="">
@@ -58,5 +57,3 @@
         </div>
     </div>
 </div>
-<%- include partials/footer.ejs %>     
-

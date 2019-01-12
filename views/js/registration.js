@@ -1,5 +1,5 @@
 function regvalidation() {
-     console.log("povezan");
+
     var var_user= document.getElementById('id_username').value.replace(/^\s+/, '').replace(/\s+$/, '');
     var var_email= document.getElementById('id_email').value.replace(/^\s+/, '').replace(/\s+$/, '');
     var var_pass= document.getElementById('id_pass').value;         

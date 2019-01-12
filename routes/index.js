@@ -1,7 +1,11 @@
-var express      = require("express");
-var router       = express.Router();
-var User         = require("../models/user");
-var passport     = require("passport");
+var express         = require("express");
+var router          = express.Router();
+var User            = require("../models/user");
+var passport        = require("passport");
+var async           = require('async');
+var crypto          = require('crypto');
+var nodemailer      = require("nodemailer");
+
 
 var Artikl = require("../models/artikl");
 var Cart = require("../models/cart");
@@ -12,64 +16,10 @@ router.get("/", function(req,res){
    res.render("pocetna"); 
 });
 
-router.get("/index", function(req,res){
-   res.render("index"); 
-});
-
-/*============================================================*/
-router.get("/shopping-cart", function(req,res){
-   res.render("shopping-cart"); 
-});
-router.get('/shop/:id', function (req, res) {
-    
-    var cart = new Cart(req.session.cart ? req.session.cart : {});
-    
-    Artikl.findById(req.params.id, function (err, oneProduct) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log("KUPIO SI ");
-            cart.add(oneProduct, oneProduct.id);
-            req.session.cart = cart;
-            console.log(req.session.cart);
-            
-            res.redirect("/");
-            
-        }
-    });
-});
-//add one more unit in shopping-cart
-router.get('/shop/:id/add', function (req, res) {
-    var cart = new Cart(req.session.cart ? req.session.cart : {});
-    Artikl.findById(req.params.id, function (err, oneProduct) {
-        if (err) {
-            console.log(err);
-        } else {
-            cart.add(oneProduct, oneProduct.id);  // adding the product to cart
-            req.session.cart = cart; //store cart object in session,,we dont need to save beacuse session automatically saving 
-            //req.flash('success', `Successfully added ${oneProduct.title} to your cart.`);
-            res.redirect("/");
-        }
-    });
-});
-//get shopping-cart
-router.get("/shopping-cart", function (req, res) {
-    if (!req.session.cart) {
-         console.log("prazna");
-        return res.render("/shopping-cart", { artikli: null });
-       
-    } else {
-        console.log("puna")
-        var cart = new Cart(req.session.cart);
-        res.render("/shopping-cart", { artikli: cart.generateArray(), totalPrice: cart.totalPrice });
-    }
-});
-
-
 
 
 /*==================================================================*/
-router.get("/admin-panel", function(req,res){
+router.get("/admin-panel", isAdmin, function(req,res){
    res.render("admin-panel"); 
 });
 /*****************************************************************/
@@ -176,6 +126,13 @@ router.get("/register", function(req,res){
 
 router.post("/register", function(req, res) {
     var newUser = new User({username: req.body.username, email: req.body.email});
+    
+    User.findOne({ username: req.body.username }, function(err, user) {
+        if (user) {
+          req.flash('Username already taken');
+          return;
+        }
+    });
     User.register(newUser, req.body.password, function(err,user){
         if(err){
             console.log(err);
@@ -210,6 +167,128 @@ router.get("/logout", function(req, res){
     req.logout();
     res.redirect("/");
 });
+/*********************************** RESET PASSWORD *******************/
+router.get('/forgot', function(req, res) {
+    if(!req.user)
+        return res.render("forgot");
+    return res.redirect("/");
+});
+
+router.post('/forgot', function(req, res, next) {
+  async.waterfall([
+    function(done) {
+      crypto.randomBytes(20, function(err, buf) {
+        var token = buf.toString('hex');
+        done(err, token);
+      });
+    },
+    function(token, done) {
+      User.findOne({ email: req.body.email }, function(err, user) {
+        if (!user) {
+          req.flash('error', 'No account with that email address exists.');
+          return res.render('forgotFailed');
+        }
+
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+        user.save(function(err) {
+          done(err, token, user);
+        });
+      });
+    },
+    function(token, user, done) {
+      var smtpTransport = nodemailer.createTransport({
+        service: 'Gmail', 
+        auth: {
+          user: 'gamingarena5454@gmail.com',
+          pass: process.env.GMAILPW
+        }
+      });
+      var mailOptions = {
+        to: user.email,
+        from: 'gamingarena@gamingarena.club',
+        subject: 'GamingArena password reset',
+        text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+          'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+          'https://gamingarena.club' + '/reset/' + token + '\n\n' +
+          'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+      };
+      smtpTransport.sendMail(mailOptions, function(err) {
+        console.log('mail sent');
+        res.render("forgotSent",{email: user.email});
+        done(err, 'done');
+      });
+    }
+  ], function(err) {
+    if (err) return next(err);
+    res.redirect('/forgot');
+  });
+});
+
+router.get('/reset/:token', function(req, res) {
+  User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+    if (!user) {
+      req.flash('error', 'Password reset token is invalid or has expired.');
+      return res.redirect('/forgot');
+    }
+    res.render('reset', {token: req.params.token});
+  });
+});
+
+router.post('/reset/:token', function(req, res) {
+  async.waterfall([
+    function(done) {
+      User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
+        if (!user) {
+          req.flash('error', 'Password reset token is invalid or has expired.');
+          return res.redirect('back');
+        }
+        if(req.body.password === req.body.confirm) {
+          user.setPassword(req.body.password, function(err) {
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpires = undefined;
+
+            user.save(function(err) {
+              req.logIn(user, function(err) {
+                done(err, user);
+              });
+            });
+          })
+        } else {
+            req.flash("error", "Passwords do not match.");
+            return res.redirect('back');
+        }
+      });
+    },
+    function(user, done) {
+      var smtpTransport = nodemailer.createTransport({
+        service: 'Gmail', 
+        auth: {
+          user: 'gamingarena@gamingarena.club',
+          pass: process.env.GMAILPW
+        }
+      });
+      var mailOptions = {
+        to: user.email,
+        from: 'gamingarena5454@gmail.com',
+        subject: 'Your password has been changed',
+        text: 'Hello,\n\n' +
+          'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
+      };
+      smtpTransport.sendMail(mailOptions, function(err) {
+        req.flash('success', 'Success! Your password has been changed.');
+        done(err);
+      });
+    }
+  ], function(err) {
+    res.redirect("/");
+  });
+});
+
+
+
+/********************************************************/
 
 function usernameToLowerCase(req,res,next){
     req.body.username = req.body.username.toLowerCase();
@@ -225,5 +304,20 @@ function isHeadAdmin(req, res, next){
     }
     next();
 }
+
+function isAdmin(req,res,next){
+
+    if(req.user == undefined){
+        return res.redirect("/");
+    }
+    else if(req.user.isAdmin == false){
+        return res.redirect("/");
+    }
+    next();
+}
+router.get("/shopping-cart", isAdmin, function(req,res){
+   res.render("shopping-cart"); 
+});
+
 
 module.exports = router;

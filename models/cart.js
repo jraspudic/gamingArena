@@ -6,19 +6,19 @@ module.exports = function Cart(oldCart) {
     this.add = function(item, id) {
         var storedItem = this.items[id];
         if (!storedItem) {
-            storedItem = this.items[id] = {item: item, qty: 0, price: 0};
+            storedItem = this.items[id] = {item: item, qty: 0, cijena: 10};
         }
         storedItem.qty++;
-        storedItem.price = storedItem.item.price * storedItem.qty;
+        storedItem.cijena = storedItem.item.cijena * storedItem.qty;
         this.totalQty++;
-        this.totalPrice += storedItem.item.price;
+        this.totalPrice += storedItem.item.cijena;
     };
 
     this.reduceByOne = function(id) {
         this.items[id].qty--;
-        this.items[id].price -= this.items[id].item.price;
+        this.items[id].cijena -= this.items[id].item.cijena;
         this.totalQty--;
-        this.totalPrice -= this.items[id].item.price;
+        this.totalPrice -= this.items[id].item.cijena;
 
         if (this.items[id].qty <= 0) {
             delete this.items[id];
@@ -27,7 +27,7 @@ module.exports = function Cart(oldCart) {
 
     this.removeItem = function(id) {
         this.totalQty -= this.items[id].qty;
-        this.totalPrice -= this.items[id].price;
+        this.totalPrice -= this.items[id].cijena;
         delete this.items[id];
     };
     

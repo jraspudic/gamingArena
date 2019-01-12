@@ -1,0 +1,47 @@
+<%- include partials/header1v2.ejs %>
+   
+    <link rel="stylesheet" type="text/css" href="/css/login.css">
+
+<%- include partials/nav.ejs %>
+
+    <div class="header-overlay">
+            
+                <div class="container">
+                
+                    <div class="row">
+                    
+                        <div class="col-md-12">
+                        
+    	
+				            <div class="loginmodal-container">
+                                  <div class="logoo">
+                                    <img src="/images/logo.png" class="logoa">
+                                </div>
+                                          <form action="/reset/<%= token %>" method="POST" onsubmit="return resetValidate()">
+                                              
+                                    		    <input id="id_pass" type="password" name="password" value="" placeholder="Nova sifra"/>
+                                    		    <span id="pass_span"  style="color: red"></span>
+                                    		    
+                                    		    <input id="id_confim" type="password" name="confirm" value="" placeholder="Potvrdite sifru" class="form-control"/>
+                                    		    <span id="confim_span"  style="color: red"></span>
+                                    		    
+                                    		     <button type="submit" class="btn btn-primary">Submit</button>
+                                    		    
+                                          </form>
+					
+					 
+                            </div>
+		
+	
+                           
+                        </div>
+                    
+                    </div>
+              
+                
+                </div>
+            
+            </div>
+<script src="/js/resetPassValidate.js"></script>
+<%- include partials/footer.ejs %>
+
