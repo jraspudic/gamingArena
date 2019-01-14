@@ -37,7 +37,7 @@ app.use(require("express-session")({
     saveUninitialized: false,
       store: new MongoStore({
         mongooseConnection: mongoose.connection }),
-        cookie: { maxAge: 10 * 60 * 10 }
+        cookie: { maxAge: 100 * 60 * 100}
     
 }));
 

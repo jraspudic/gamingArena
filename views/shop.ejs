@@ -2,10 +2,7 @@
 
     <link rel="stylesheet" type="text/css" href="css/shop.css">
 <%- include partials/nav.ejs %>
-<style>
-    
-    
-</style>
+
         <section id="shop">
             <div class="containerr">
                 <div class="roww">
@@ -45,7 +42,7 @@
                                 <h1 class="naslov-artikla"><%- artikl.naziv %></h1>
                                 <div class="cijena-box"><p class="cijena"><%- artikl.cijena %> <i class="fa fa-usd" aria-hidden="true"></i></p></div>
                                  <% if(currentUser){ %>
-                                <a class="btn btn-kupi" href="/shop/<%= artikl._id %>/add">Dodaj u košaricu</a>
+                                <a class="btn btn-kupi" href="/shop/<%= artikl._id %>/buy">Dodaj u košaricu</a>
                                 <% } %>
                             </div>
                        </div>

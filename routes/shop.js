@@ -18,25 +18,24 @@ function escapeRegex(text) {
         if (err) {
             console.log(err);
         } else {
-            cart.add(oneProduct, oneProduct.id);// adding the product to cart
-            req.session.cart = cart; //store cart object in session,,we dont need to save beacuse session automatically saving 
-            //req.flash('success', `Successfully added ${oneProduct.title} to your cart.`);
+            cart.add(oneProduct, oneProduct.id);
+            req.session.cart = cart; 
+            
             console.log("Kupljeno");
-            res.redirect("/shop/shopping-cart");
+            res.redirect("/shop");
         }
     });
 });
-//add one more unit in shopping-cart
+//Dodavanje jos artikala
 router.get('/:id/add', function (req, res) {
     var cart = new Cart(req.session.cart ? req.session.cart : {});
     Artikl.findById(req.params.id, function (err, oneProduct) {
         if (err) {
             console.log(err);
         } else {
-            cart.add(oneProduct, oneProduct.id);  // adding the product to cart
-            req.session.cart = cart; //store cart object in session,,we dont need to save beacuse session automatically saving 
-            //req.flash('success', `Successfully added ${oneProduct.title} to your cart.`);
-            console.log("2x2");
+            cart.add(oneProduct, oneProduct.id);  
+            req.session.cart = cart; 
+            console.log("Dodano");
             res.redirect("/shop/shopping-cart");
         }
     });
@@ -52,6 +51,24 @@ router.get("/shopping-cart", function (req, res) {
        
     }
 });
+
+//Brisanje jednog artikla tj. kolicine
+router.get("/:id/deleteone", function (req, res) {
+    var cart = new Cart(req.session.cart ? req.session.cart : {});
+    cart.reduceByOne(req.params.id);
+    req.session.cart = cart;
+    res.redirect("/shop/shopping-cart");
+});
+//Brisanje artikla
+router.get("/:id/deleteitem", function (req, res) {
+    var cart = new Cart(req.session.cart ? req.session.cart : {});
+    cart.removeItem(req.params.id);
+    req.session.cart = cart;
+    res.redirect("/shop/shopping-cart");
+});
+
+
+
 /*=================================================================*/
 router.get("/", function(req, res) {
     var perPage = 6;

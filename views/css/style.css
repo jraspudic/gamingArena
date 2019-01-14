@@ -292,17 +292,12 @@ p {
 }
 
 
-
-
-
-
 .arrow-down{
   
     position: absolute;
        left:50%;
        bottom:10%;
-      
-   
+
  
 }
 .arrow-down::after{
@@ -324,11 +319,6 @@ p {
     animation:2s arrow infinite ease;
     
 }
-
-
-
-
-
 
 @-webkit-keyframes arrow{
     0%,100%{

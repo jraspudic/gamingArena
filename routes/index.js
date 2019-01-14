@@ -148,6 +148,7 @@ router.post("/register", function(req, res) {
 
 router.get("/login", function(req,res){
     if(req.user){
+         req.session = null;
      return res.redirect("/");
     }
    res.render("login");
@@ -164,8 +165,11 @@ router.post("/login",usernameToLowerCase, passport.authenticate("local",
 });
 
 router.get("/logout", function(req, res){
+    
     req.logout();
+   req.session.destroy(); 
     res.redirect("/");
+     
 });
 /*********************************** RESET PASSWORD *******************/
 router.get('/forgot', function(req, res) {
@@ -265,7 +269,7 @@ router.post('/reset/:token', function(req, res) {
       var smtpTransport = nodemailer.createTransport({
         service: 'Gmail', 
         auth: {
-          user: 'gamingarena@gamingarena.club',
+          user: 'gamingarena545@gmail.com',
           pass: process.env.GMAILPW
         }
       });
@@ -315,9 +319,5 @@ function isAdmin(req,res,next){
     }
     next();
 }
-router.get("/shopping-cart", isAdmin, function(req,res){
-   res.render("shopping-cart"); 
-});
-
 
 module.exports = router;
