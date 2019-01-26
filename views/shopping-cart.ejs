@@ -58,10 +58,12 @@
               Total:  <%= totalPrice %> $ 
             </div> &nbsp;&nbsp; &nbsp;&nbsp;
             <% }else{ %>
-            <!--IF DONT HAVE ANYTHING IN CART-->
-            <div class="p-5 text-center"> <strong>PRAZNA KOŠARICA</strong></div>
+        <!--IF DONT HAVE ANYTHING IN CART-->
+            <div class="p-5 text-center"> <strong>You don't have anything in cart. Add items!</strong></div>
             <% } %>
-           
+            <div class="">
+                <a href="/shop/checkout" class="btn btn-success">Kupi</a>
+            </div>
         </div>
     </div>
 </div>

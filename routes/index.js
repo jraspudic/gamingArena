@@ -16,8 +16,6 @@ router.get("/", function(req,res){
    res.render("pocetna"); 
 });
 
-
-
 /*==================================================================*/
 router.get("/admin-panel", isAdmin, function(req,res){
    res.render("admin-panel"); 

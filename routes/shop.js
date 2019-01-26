@@ -67,6 +67,16 @@ router.get("/:id/deleteitem", function (req, res) {
     res.redirect("/shop/shopping-cart");
 });
 
+router.get("/checkout", function (req, res) {
+    User.findById(req.user, function (err, user) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render("checkout", { user: user });
+        }
+    });
+});
+
 
 
 /*=================================================================*/
@@ -82,11 +92,10 @@ router.get("/", function(req, res) {
                req.flash("error", "Something Went Wrong");
                 return res.redirect("/shop");
             }
-                var count = artikl.length
+                Artikl.find({kategorija: { $in: req.query.search }}).count().exec(function(err, count) {
                 var totalPages = Math.ceil(count / perPage);
                 
                  if (pageNum < 1 || pageNum > totalPages) {
-                    //req.flash("error", "Page Index Out of Range"); //pado server zbog ovog :D xD
                      res.redirect("/shop");
                 } else {
                     
@@ -99,6 +108,7 @@ router.get("/", function(req, res) {
                     });
                     
                 }
+                });
             });
         }
         
@@ -181,7 +191,7 @@ router.post("/", isAdminShop ,function(req,res){
 });
     //New route
 router.get("/new", isAdminShop ,function(req,res){
-   res.render("dodajartikl"); 
+   res.render("dodajArtikl"); 
 });
 
     //Show route
@@ -203,7 +213,7 @@ router.get("/:id/edit", isAdminShop ,function(req, res) {
             res.redirect("/shop");
         }
         else{
-            res.render("editartikl",{artikl: pronadjenartikl});
+            res.render("editArtikl",{artikl: pronadjenartikl});
         }
     });
 });

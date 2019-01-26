@@ -6,7 +6,7 @@ module.exports = function Cart(oldCart) {
     this.add = function(item, id) {
         var storedItem = this.items[id];
         if (!storedItem) {
-            storedItem = this.items[id] = {item: item, qty: 0, cijena: 10};
+            storedItem = this.items[id] = {item: item, qty: 0, cijena: 0};
         }
         storedItem.qty++;
         storedItem.cijena = storedItem.item.cijena * storedItem.qty;
