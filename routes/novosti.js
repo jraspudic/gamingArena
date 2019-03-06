@@ -57,7 +57,7 @@ router.post("/", isAdminNovosti ,function(req,res){
     function(err,novost){
         if(err)
             console.log("error");
-        else   
+            else   
             console.log("Dodana novost: " + novost);
     });
     

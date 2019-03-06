@@ -9,7 +9,7 @@ var nodemailer      = require("nodemailer");
 
 var Artikl = require("../models/artikl");
 var Cart = require("../models/cart");
-var Order = require("../models/order");
+
 
 
 router.get("/", function(req,res){
@@ -49,10 +49,9 @@ router.post("/admini/:id", isHeadAdmin, function(req, res){
     
     res.redirect("/admini");
 });
-
+//Birsanje admina totalno iz DB
 router.delete("/admini/:id", isHeadAdmin, function(req,res){
-    User.findByIdAndDelete(req.params.id,
-    function(err, korisnik){
+    User.findByIdAndDelete(req.params.id,function(err, korisnik){
         if(err){
             console.log("error");
         }
@@ -68,7 +67,7 @@ router.delete("/admini/:id", isHeadAdmin, function(req,res){
 
 
 /*==========================0*/
-
+//Ipisivanje svih korisnika
 router.get("/korisnici", isHeadAdmin, function(req, res){
      User.find({}, function(err, sviKorisnici){
         if(err) console.log(err);
@@ -76,7 +75,7 @@ router.get("/korisnici", isHeadAdmin, function(req, res){
         else  res.render("korisnici",{korisnici: sviKorisnici});
     });
 });
-
+//Dodavanje i skidanje admina
 router.post("/korisnici/:id", isHeadAdmin, function(req, res){
     
     var toggleAdmin = (req.body.isAdminBtn=="true");
@@ -97,7 +96,7 @@ router.post("/korisnici/:id", isHeadAdmin, function(req, res){
     
     res.redirect("/korisnici");
 });
-
+//Brisanje korisnika iz DB
 router.delete("/korisnici/:id", isHeadAdmin, function(req,res){
     User.findByIdAndDelete(req.params.id,
     function(err, korisnik){
@@ -127,7 +126,7 @@ router.post("/register", function(req, res) {
     
     User.findOne({ username: req.body.username }, function(err, user) {
         if (user) {
-          req.flash('Username already taken');
+          req.flash('Postoji user');
           return;
         }
     });
@@ -192,7 +191,7 @@ router.post('/forgot', function(req, res, next) {
         }
 
         user.resetPasswordToken = token;
-        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+        user.resetPasswordExpires = Date.now() + 3600000; // 1 sat
 
         user.save(function(err) {
           done(err, token, user);
@@ -209,7 +208,7 @@ router.post('/forgot', function(req, res, next) {
       });
       var mailOptions = {
         to: user.email,
-        from: 'gamingarena@gamingarena.club',
+        from: 'gamingarena5454@gmail.club',
         subject: 'GamingArena password reset',
         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
           'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
@@ -267,7 +266,7 @@ router.post('/reset/:token', function(req, res) {
       var smtpTransport = nodemailer.createTransport({
         service: 'Gmail', 
         auth: {
-          user: 'gamingarena545@gmail.com',
+          user: 'gamingarena5454@gmail.com',
           pass: process.env.GMAILPW
         }
       });
@@ -288,6 +287,27 @@ router.post('/reset/:token', function(req, res) {
   });
 });
 
+router.post("/contact", function(req,res){
+    var smtpTransport = nodemailer.createTransport({
+        service: 'Gmail', 
+        auth: {
+          user: 'gamingarena5454@gmail.com',
+          pass: process.env.GMAILPW
+        }
+      });
+      var mailOptions = {
+        to: 'gamingarena5454@gmail.com',
+        from: 'gamingarena@gamingarena.club',
+        subject: 'Kontakt forma',
+        text: 'Ime: ' + req.body.ime + '\n' + 'Email: ' + req.body.email + '\n' + 'Predmet: ' + req.body.predmet + '\n' + 
+        'Poruka: ' + req.body.poruka
+      };
+      smtpTransport.sendMail(mailOptions, function(err) {
+        console.log('mail sent');
+});
+
+    res.render("contactSent");
+});
 
 
 /********************************************************/
@@ -318,4 +338,4 @@ function isAdmin(req,res,next){
     next();
 }
 
-module.exports = router;
+module.exports = router; 

@@ -4,15 +4,15 @@ var router   = express.Router();
 var Artikl = require("../models/artikl");
 var Cart = require("../models/cart");
 var User = require("../models/user");
-var Order = require("../models/order");
+var nodemailer      = require("nodemailer");
 
-// helper to handle fuzzy search
+
 function escapeRegex(text) {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 };
 
 
- router.get('/:id/buy', function (req, res) {
+router.get('/:id/buy',isLoggedIn,function (req, res) {
     var cart = new Cart(req.session.cart ? req.session.cart : {});
     Artikl.findById(req.params.id, function (err, oneProduct) {
         if (err) {
@@ -20,14 +20,12 @@ function escapeRegex(text) {
         } else {
             cart.add(oneProduct, oneProduct.id);
             req.session.cart = cart; 
-            
-            console.log("Kupljeno");
             res.redirect("/shop");
         }
     });
 });
 //Dodavanje jos artikala
-router.get('/:id/add', function (req, res) {
+router.get('/:id/add',isLoggedIn,function (req, res) {
     var cart = new Cart(req.session.cart ? req.session.cart : {});
     Artikl.findById(req.params.id, function (err, oneProduct) {
         if (err) {
@@ -35,13 +33,12 @@ router.get('/:id/add', function (req, res) {
         } else {
             cart.add(oneProduct, oneProduct.id);  
             req.session.cart = cart; 
-            console.log("Dodano");
             res.redirect("/shop/shopping-cart");
         }
     });
 });
 
-router.get("/shopping-cart", function (req, res) {
+router.get("/shopping-cart",isLoggedIn,function (req, res) {
     if (!req.session.cart) {
         res.render("shopping-cart", { products: null });
     } else {
@@ -53,31 +50,59 @@ router.get("/shopping-cart", function (req, res) {
 });
 
 //Brisanje jednog artikla tj. kolicine
-router.get("/:id/deleteone", function (req, res) {
+router.get("/:id/deleteone",isLoggedIn,function (req, res) {
     var cart = new Cart(req.session.cart ? req.session.cart : {});
     cart.reduceByOne(req.params.id);
     req.session.cart = cart;
     res.redirect("/shop/shopping-cart");
 });
 //Brisanje artikla
-router.get("/:id/deleteitem", function (req, res) {
+router.get("/:id/deleteitem",isLoggedIn,function (req, res) {
     var cart = new Cart(req.session.cart ? req.session.cart : {});
     cart.removeItem(req.params.id);
     req.session.cart = cart;
     res.redirect("/shop/shopping-cart");
 });
 
-router.get("/checkout", function (req, res) {
-    User.findById(req.user, function (err, user) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.render("checkout", { user: user });
-        }
-    });
+router.get("/checkout", isLoggedIn, function (req, res) {
+            res.render("checkout");
 });
 
+router.post("/narudjba", function(req, res) {
+    var smtpTransport = nodemailer.createTransport({
+        service: 'Gmail', 
+        auth: {
+          user: 'gamingarena5454@gmail.com',
+          pass: process.env.GMAILPW
+        }
+      });
+      var mailOptions = {
+        to: 'gamingarena5454@gmail.com',
+        from: 'gamingarena@gamingarena.club',
+        subject: 'Narudzba',
+        text: 'Osoba: ' + req.body.ime +' '+ req.body.prezime+ '\n' + 'Email: ' + req.body.email + '\n' + 'Ulica: ' + req.body.ulica + '\n' + 
+        'Grad: ' + req.body.grad +'\n'+ 'Poštanski broj: ' + req.body.postanskiBroj + '\n' + 'Telefon: ' + req.body.telefon + '\n'+'\n'+'\n'+
+        ispisiNarudzbu(req.session.cart) 
+      };
+      smtpTransport.sendMail(mailOptions, function(err) {
+        console.log('mail sent');
+});
+    res.render("narudjbaPoslana");
+    
+});
 
+function ispisiNarudzbu(cart){
+    var s ="";
+    
+    var cart = new Cart(cart);
+    var products = cart.generateArray()
+    
+    products.forEach(function(products){
+       s = s + products.item.naziv + ' ' + 'x' + products.qty + '\n';
+    });
+    s = s + 'Ukupna cijena: ' + cart.totalPrice;
+    return s;
+}
 
 /*=================================================================*/
 router.get("/", function(req, res) {
@@ -150,6 +175,13 @@ function isAdminShop(req,res,next){
         return res.redirect("/shop");
     }
     else if(req.user.isAdmin == false){
+        return res.redirect("/shop");
+    }
+    next();
+}
+
+function isLoggedIn(req,res,next){
+    if(req.user == undefined){
         return res.redirect("/shop");
     }
     next();

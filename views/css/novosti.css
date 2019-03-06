@@ -1,3 +1,19 @@
+.slikaNovosti{
+  width: 200px;
+  height: 250px;
+  display:block;
+  margin:auto;
+  background-size: cover;
+  background-position: center;
+  transition: transform .3s ease-out;
+    
+                
+}
+.slikaNovosti:hover{
+  transform: scale(1.2);
+        
+}
+
 .dropbtn {
   background-color: transparent;
   color: white;
@@ -32,3 +48,7 @@
 .dropdown:hover .dropdown-content {display: block;}
 
 .dropdown:hover .dropbtn {color: black;}
+
+.artikl{
+  
+}

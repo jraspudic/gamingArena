@@ -60,6 +60,7 @@
     }
     .containerr{
         width:100%;
+        margin-top:100px;
     }
     .roww{
         width:100%;
@@ -217,7 +218,7 @@
   user-select: none;
 }
 
-/* Hide the browser's default checkbox */
+
 .box-shop input {
   position: absolute;
   opacity: 0;
@@ -226,7 +227,7 @@
   width: 0;
 }
 
-/* Create a custom checkbox */
+
 .checkmark {
   position: absolute;
   top: 0;
@@ -236,7 +237,7 @@
   background-color: #DFDEDA;
 }
 
-/* On mouse-over, add a grey background color */
+
 .box-shop:hover input ~ .checkmark {
   background-color: #ccc;
 }
@@ -336,4 +337,3 @@
   text-align: center;
 }
 
-/*=======================SHOP KARTICA================*/
